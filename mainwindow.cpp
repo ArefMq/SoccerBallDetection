@@ -118,7 +118,7 @@ void MainWindow::detectCircles()
         qpn->drawEllipse(QPointF(circle.x, circle.y), (qreal)circle.z, (qreal)circle.z);
 
         // [TODO] : sorting is needed in order to deliver the best result
-        return; //-- Deliver only one result
+        break; //-- Deliver only one result
     }
 
     delete qpn;
@@ -203,8 +203,8 @@ void MainWindow::kinematicsUpdate()
 
 bool MainWindow::loadImage()
 {
-    QImage qimg = QImage("/home/aref/workspace/humanoid/images/a-short.png").scaled(500, 600, Qt::KeepAspectRatio);
-//    QImage qimg = QImage("/home/aref/workspace/humanoid/images/b.jpg").scaled(500, 600, Qt::KeepAspectRatio);
+//    QImage qimg = QImage("/home/aref/workspace/humanoid/images/a-short.png").scaled(500, 600, Qt::KeepAspectRatio);
+    QImage qimg = QImage("/home/aref/workspace/humanoid/images/b.jpg").scaled(500, 600, Qt::KeepAspectRatio);
     Image tempImage;
     image.resize(qimg.width(), qimg.height());
     tempImage.resize(qimg.width(), qimg.height());
