@@ -80,7 +80,9 @@ QImage MainWindow::image2qimage(const Image& img)
 
 void MainWindow::detectCircles()
 {
-    circleDetection.update();
+//    return;
+    circleDetection.update(preferedPoints);
+    preferedPoints.clear();
 
     QPainter* qpn = new QPainter(&monitor);
 
@@ -94,17 +96,29 @@ void MainWindow::detectCircles()
 
 
         //-- Run Sanity checks:
-        circleDetection.resizeCirlcle(circle, kinematicsProvider.getHorizon(), colorAnalyzer, *qpn);
-        qpn->setPen(QPen(Qt::yellow, 3));
+        circleDetection.resizeCirlcle(circle, colorAnalyzer.boundary(circle.x) /*kinematicsProvider.getHorizon()*/, colorAnalyzer, *qpn);
+
 
         //-- First Step Size Check
         if (circle.z < 2.5 || circle.z > 80) // [TODO] : make this config : ball max size in px
             continue;
 
-        //-- Check green percentage
-
-
+        qpn->setPen(Qt::darkGreen);
         qpn->drawEllipse(QPointF(circle.x, circle.y), (qreal)circle.z, (qreal)circle.z);
+
+        //-- Check green percentage
+        if (!checkWhitePercentage(circle.x, circle.y, circle.z))
+            continue;
+
+        //-- Adding Prefered Points
+        preferedPoints.push_back(Vector2D(circle.x, circle.y-circle.z));
+        preferedPoints.push_back(Vector2D(circle.x, circle.y));
+
+        qpn->setPen(QPen(Qt::yellow, 3));
+        qpn->drawEllipse(QPointF(circle.x, circle.y), (qreal)circle.z, (qreal)circle.z);
+
+        // [TODO] : sorting is needed in order to deliver the best result
+        return; //-- Deliver only one result
     }
 
     delete qpn;
@@ -133,12 +147,12 @@ bool MainWindow::checkWhitePercentage(int cx, int cy, int r)
     return false;
 
 // [FIXME] : move these
-#define minWhitePercentage (0.35)
+#define minWhitePercentage (0.05)
 #define minNonGreenPercentage (0.7)
 
 
   //-- Reject balls with less than 85% white pixels
-  if (//(float)whitePixel/(float)totalSearchedPixel < minWhitePercentage ||
+  if ((float)whitePixel/(float)totalSearchedPixel < minWhitePercentage ||
       (float)nonGreenPixels/(float)totalSearchedPixel < minNonGreenPercentage)
     return false;
   return true;
@@ -148,8 +162,8 @@ int MainWindow::searchedColor(int x, int y, int& color, int& nonGreen)
 {
   if (x > -1 && x < image.width() && y > -1 && y < image.height())
   {
-    nonGreen += colorAnalyzer.isGreen(x, y)?0:1;
-//    color += colorAnalyzer.isGreen(theImage[y]+x);
+    nonGreen += colorAnalyzer.notGreen(x, y);
+    color += colorAnalyzer.isWhite(x, y);
     return 1;
   }
   return 0;
@@ -168,16 +182,16 @@ void MainWindow::edgeImageUpdate()
         else
             monitor.setPixel(points.at(i).x, points.at(i).y, QColor(Qt::red).rgb());
 
-        //        monitor.setPixel(points.at(i).x-1, points.at(i).y-1, QColor(Qt::red).rgb());
-        //        monitor.setPixel(points.at(i).x,   points.at(i).y-1, QColor(Qt::red).rgb());
-        //        monitor.setPixel(points.at(i).x+1, points.at(i).y-1, QColor(Qt::red).rgb());
+//        monitor.setPixel(points.at(i).x-1, points.at(i).y-1, QColor(Qt::red).rgb());
+//        monitor.setPixel(points.at(i).x,   points.at(i).y-1, QColor(Qt::red).rgb());
+//        monitor.setPixel(points.at(i).x+1, points.at(i).y-1, QColor(Qt::red).rgb());
 
-        //        monitor.setPixel(points.at(i).x-1, points.at(i).y, QColor(Qt::red).rgb());
-        //        monitor.setPixel(points.at(i).x+1, points.at(i).y, QColor(Qt::red).rgb());
+//        monitor.setPixel(points.at(i).x-1, points.at(i).y, QColor(Qt::red).rgb());
+//        monitor.setPixel(points.at(i).x+1, points.at(i).y, QColor(Qt::red).rgb());
 
-        //        monitor.setPixel(points.at(i).x-1, points.at(i).y+1, QColor(Qt::red).rgb());
-        //        monitor.setPixel(points.at(i).x,   points.at(i).y+1, QColor(Qt::red).rgb());
-        //        monitor.setPixel(points.at(i).x+1, points.at(i).y+1, QColor(Qt::red).rgb());
+//        monitor.setPixel(points.at(i).x-1, points.at(i).y+1, QColor(Qt::red).rgb());
+//        monitor.setPixel(points.at(i).x,   points.at(i).y+1, QColor(Qt::red).rgb());
+//        monitor.setPixel(points.at(i).x+1, points.at(i).y+1, QColor(Qt::red).rgb());
     }
 }
 
@@ -190,6 +204,7 @@ void MainWindow::kinematicsUpdate()
 bool MainWindow::loadImage()
 {
     QImage qimg = QImage("/home/aref/workspace/humanoid/images/a-short.png").scaled(500, 600, Qt::KeepAspectRatio);
+//    QImage qimg = QImage("/home/aref/workspace/humanoid/images/b.jpg").scaled(500, 600, Qt::KeepAspectRatio);
     Image tempImage;
     image.resize(qimg.width(), qimg.height());
     tempImage.resize(qimg.width(), qimg.height());
@@ -245,17 +260,41 @@ void MainWindow::colorAnalyze()
 {
     colorAnalyzer.update();
 
-    //    for (unsigned int y=0; y<image.height(); ++y)
-    //        for (unsigned int x=0; x<image.width(); ++x)
-    //            if (colorAnalyzer.isGreen(x, y))
-    //                monitor.setPixel(x, y, QColor(Qt::green).rgb());
+//    for (unsigned int y=0; y<image.height(); ++y)
+//        for (unsigned int x=0; x<image.width(); ++x)
+//            if (colorAnalyzer.isWhite(x, y))
+//                monitor.setPixel(x, y, QColor(Qt::red).rgb());
 
-    //    for (unsigned int x=0; x<256; ++x)
-    //    {
-    //        const double d = (double)image.height() * (double)colorAnalyzer.test[x] / (double)colorAnalyzer.test2;
-    //        for (int y=0; y<d; ++y)
-    //            monitor.setPixel(x, image.height() - y - 1, QColor(Qt::red).rgb());
-    //    }
+
+    QPainter* qpn = new QPainter(&monitor);
+    qpn->setPen(QPen(Qt::red, 1));
+    for (unsigned i=1; i<image.width(); ++i)
+        qpn->drawLine(i, colorAnalyzer.boundary(i), i-1, colorAnalyzer.boundary(i-1));
+    qpn->setPen(QPen(Qt::yellow, 3));
+    for (unsigned i=0; i<image.width(); ++i)
+        qpn->drawPoint(i, colorAnalyzer.boundary(i));
+
+
+//    qpn->setPen(QPen(Qt::darkRed, 1));
+//    for (unsigned i=1; i<colorAnalyzer.test3.size(); ++i)
+//        qpn->drawLine(colorAnalyzer.test3.at(i).x, colorAnalyzer.test3.at(i).y, colorAnalyzer.test3.at(i-1).x, colorAnalyzer.test3.at(i-1).y);
+//    qpn->setPen(QPen(Qt::green, 3));
+//    for (unsigned i=0; i<colorAnalyzer.test3.size(); ++i)
+//        qpn->drawPoint(colorAnalyzer.test3.at(i).x, colorAnalyzer.test3.at(i).y);
+
+    delete qpn;
+
+//    for (unsigned int y=0; y<image.height(); ++y)
+//        for (unsigned int x=0; x<image.width(); ++x)
+//            if (colorAnalyzer.isGreen(x, y))
+//                monitor.setPixel(x, y, QColor(Qt::green).rgb());
+
+//    for (unsigned int x=0; x<256; ++x)
+//    {
+//        const double d = (double)image.height() * (double)colorAnalyzer.test[x] / (double)colorAnalyzer.test2;
+//        for (int y=0; y<d; ++y)
+//            monitor.setPixel(x, image.height() - y - 1, QColor(Qt::red).rgb());
+//    }
 }
 
 void MainWindow::on_radioButton_clicked()

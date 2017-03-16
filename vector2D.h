@@ -107,6 +107,11 @@ public:
     {
         return x * x + y * y;
     }
+
+    inline bool operator <(const Vector2D &p) const
+    {
+        return x < p.x || (x == p.x && y < p.y);
+    }
 };
 
 class Vector3D : public Vector2D
@@ -213,6 +218,11 @@ public:
     inline float sqr() const
     {
         return x * x + y * y + z * z;
+    }
+
+    inline bool operator <(const Vector3D &p) const
+    {
+        return x < p.x || (x == p.x && y < p.y) || (x == p.x && y == p.y && z < p.z);
     }
 };
 

@@ -35,6 +35,8 @@ private:
     QImage monitor;
     QImage edgeMonitor;
 
+    std::vector<Vector2D> preferedPoints;
+
     //-- Representations
     Image image;
     ColorAnalyzer colorAnalyzer;
