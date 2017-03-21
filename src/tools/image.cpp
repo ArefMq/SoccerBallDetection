@@ -2,7 +2,7 @@
 #include <iostream>
 
 Image::Image() :
-    data(0), _width(0), _height(0)
+    _totalSize(0), _width(0), _height(0), data(0)
 {
 }
 

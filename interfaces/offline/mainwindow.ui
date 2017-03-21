@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>676</width>
+    <width>519</width>
     <height>644</height>
    </rect>
   </property>
@@ -70,76 +70,6 @@
     </property>
     <property name="text">
      <string>refresh</string>
-    </property>
-   </widget>
-   <widget class="QDoubleSpinBox" name="spn_horizon">
-    <property name="geometry">
-     <rect>
-      <x>520</x>
-      <y>110</y>
-      <width>151</width>
-      <height>27</height>
-     </rect>
-    </property>
-    <property name="minimum">
-     <double>-99.000000000000000</double>
-    </property>
-    <property name="maximum">
-     <double>999.990000000000009</double>
-    </property>
-   </widget>
-   <widget class="QDoubleSpinBox" name="spn_step_v1">
-    <property name="geometry">
-     <rect>
-      <x>520</x>
-      <y>160</y>
-      <width>151</width>
-      <height>27</height>
-     </rect>
-    </property>
-    <property name="decimals">
-     <number>4</number>
-    </property>
-    <property name="singleStep">
-     <double>0.010000000000000</double>
-    </property>
-   </widget>
-   <widget class="QDoubleSpinBox" name="spn_step_v2">
-    <property name="geometry">
-     <rect>
-      <x>520</x>
-      <y>190</y>
-      <width>151</width>
-      <height>27</height>
-     </rect>
-    </property>
-    <property name="decimals">
-     <number>4</number>
-    </property>
-    <property name="minimum">
-     <double>0.010000000000000</double>
-    </property>
-    <property name="singleStep">
-     <double>0.010000000000000</double>
-    </property>
-   </widget>
-   <widget class="QDoubleSpinBox" name="spn_step_v3">
-    <property name="geometry">
-     <rect>
-      <x>520</x>
-      <y>220</y>
-      <width>151</width>
-      <height>27</height>
-     </rect>
-    </property>
-    <property name="decimals">
-     <number>4</number>
-    </property>
-    <property name="maximum">
-     <double>999.990000000000009</double>
-    </property>
-    <property name="singleStep">
-     <double>0.010000000000000</double>
     </property>
    </widget>
   </widget>

@@ -27,3 +27,10 @@
 *.exe
 *.out
 *.app
+
+# Temporary Files
+*~
+*.pro.user
+.cproject
+.project
+*.swp
