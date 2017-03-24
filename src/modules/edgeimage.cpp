@@ -1,15 +1,13 @@
 /**
- * @file EdgeImage.cpp
+ * @file edgeimage.cpp
  * A general purpose module for edge detection
- * @author <a href="mailto:a.moqadam@mrl-spl.ir">Aref Moqadam</a>
+ * @author <a href="mailto:a.moqadam@mrl-spl.ir">Aref Moqadam Mehr</a>
  * @date Apr 2016
  */
 
-#include "EdgeImage.h"
+#include "edgeimage.h"
 #include <iostream>
 #include <cmath>
-
-#define pl //std::cout << __FILE__ << " :: " << __LINE__ << std::endl;
 
 Image::Pixel EdgeImage::black;
 Image::Pixel EdgeImage::red;
@@ -21,9 +19,12 @@ EdgeImage::EdgeImage(const Image& image) :
     originY(0),
     _image(image)
 {
-    pl;
     black.cr = black.cb = 127; black.y = 0;
     red.cr = 250; red.cb = 0; red.y = 127;
+
+    expStep = expStep__;
+    expCStep = expCStep__;
+    horizonOffset = horizonOffset__;
 }
 
 EdgeImage::~EdgeImage()
@@ -32,8 +33,9 @@ EdgeImage::~EdgeImage()
 
 void EdgeImage::createLookup()
 {
-    _scanGraphLookup.clear();
     std::cout << "creating edge lookup table..." << std::endl;
+
+    _scanGraphLookup.clear();
     resize(_image.width(), _image.height());
 
     for (float y=0; y<_height*3.f; y+=edgeingStep(y))
@@ -41,6 +43,7 @@ void EdgeImage::createLookup()
         std::vector<Vector2D> scanRow;
         for (float x=_width/2.f; x<(float)_width; x+=edgeingStep(y))
             scanRow.push_back(Vector2D(x, y+horizonOffset));
+
         for (float x=_width/2.f; x>=0; x-=edgeingStep(y))
             scanRow.push_back(Vector2D(x, y+horizonOffset));
         _scanGraphLookup.push_back(scanRow);
@@ -53,7 +56,6 @@ void EdgeImage::createLookup()
 //            scanRow.push_back(Vector2D(x, y));
 //        _scanGraphLookup.push_back(scanRow);
 //    }
-
 
     static int i=0;
     if (i++ > 10)
@@ -120,33 +122,32 @@ void EdgeImage::refine(const Vector2D& point)
 
 void EdgeImage::update()
 {
-    pl;
     _edgePoints.clear();
 
     if (_width != _image.width() || height() != _image.height())
         createLookup();
-    pl;
+
     for (unsigned int y=0; y<_height; ++y)
         for (unsigned int x=0; x<_width; ++x)
             getPixel(x, y) = black; //_image[y*avStep][x*avStep];
-    pl;
+
     for (unsigned row=0; row<_scanGraphLookup.size(); ++row)
         for (unsigned col=0; col<_scanGraphLookup.at(row).size(); ++col)
         {
             Vector2D middle = Vector2D(
-                        stepTable_X(row, col),
-                        stepTable_Y(row, col)
-                        );
+                    stepTable_X(row, col),
+                    stepTable_Y(row, col)
+            );
 
             Vector2D topLeft = Vector2D(
-                        (col>0)?stepTable_X(row,col-1):stepTable_X(row,col)-1,
-                        (row>0)?stepTable_Y(row-1,0):stepTable_Y(row,col)-1
-                        );
+                    (col>0)?stepTable_X(row,col-1):stepTable_X(row,col)-1,
+                    (row>0)?stepTable_Y(row-1,0):stepTable_Y(row,col)-1
+            );
 
             Vector2D bottomRight = Vector2D(
-                        (col<_scanGraphLookup.at(row).size()-1)?stepTable_X(row,col+1):stepTable_X(row,col)+1,
-                        (row<_scanGraphLookup.size()-1)?stepTable_Y(row+1,0):stepTable_Y(row,col)+1
-                        );
+                    (col<_scanGraphLookup.at(row).size()-1)?stepTable_X(row,col+1):stepTable_X(row,col)+1,
+                    (row<_scanGraphLookup.size()-1)?stepTable_Y(row+1,0):stepTable_Y(row,col)+1
+            );
 
             if (bottomRight.x >= _width || bottomRight.y >= _height)
                 break;
@@ -157,20 +158,16 @@ void EdgeImage::update()
             edgePixel = calculateEdge(topLeft, middle, bottomRight, 100);
             setSafePixel(middle.x, middle.y, edgePixel);
         }
-
-    pl
 }
 
 Image::Pixel EdgeImage::calculateEdge(const Vector2D& topLeft, const Vector2D& middle, const Vector2D& bottomRight, int thresh)
 {
-pl;
-
-if (topLeft.x < 0 || topLeft.x >= _width || topLeft.y < 0 || topLeft.y >= _height)
-    std::cout << "invalid injection => top left...     (" << topLeft.x << ", " << topLeft.y << ") - (" << middle.x << ", " << middle.y << ") - (" << bottomRight.x << ", " << bottomRight.y << ")" << std::endl;
-if (middle.x < 0 || middle.x >= _width || middle.y < 0 || middle.y >= _height)
-    std::cout << "invalid injection => middle...       (" << topLeft.x << ", " << topLeft.y << ") - (" << middle.x << ", " << middle.y << ") - (" << bottomRight.x << ", " << bottomRight.y << ")" << std::endl;
-if (bottomRight.x < 0 || bottomRight.x >= _width || bottomRight.y < 0 || bottomRight.y >= _height)
-    std::cout << "invalid injection => bottom right... (" << topLeft.x << ", " << topLeft.y << ") - (" << middle.x << ", " << middle.y << ") - (" << bottomRight.x << ", " << bottomRight.y << ")" << std::endl;
+    if (topLeft.x < 0 || topLeft.x >= _width || topLeft.y < 0 || topLeft.y >= _height)
+        std::cout << "invalid injection => top left...     (" << topLeft.x << ", " << topLeft.y << ") - (" << middle.x << ", " << middle.y << ") - (" << bottomRight.x << ", " << bottomRight.y << ")" << std::endl;
+    if (middle.x < 0 || middle.x >= _width || middle.y < 0 || middle.y >= _height)
+        std::cout << "invalid injection => middle...       (" << topLeft.x << ", " << topLeft.y << ") - (" << middle.x << ", " << middle.y << ") - (" << bottomRight.x << ", " << bottomRight.y << ")" << std::endl;
+    if (bottomRight.x < 0 || bottomRight.x >= _width || bottomRight.y < 0 || bottomRight.y >= _height)
+        std::cout << "invalid injection => bottom right... (" << topLeft.x << ", " << topLeft.y << ") - (" << middle.x << ", " << middle.y << ") - (" << bottomRight.x << ", " << bottomRight.y << ")" << std::endl;
 
     // [TODO] : implement a better filter
 
@@ -192,7 +189,6 @@ if (bottomRight.x < 0 || bottomRight.x >= _width || bottomRight.y < 0 || bottomR
     Pixel a6; getSafeOrginalPixel(topLeft.x,     bottomRight.y, a6);
     Pixel a7; getSafeOrginalPixel(middle.x,      bottomRight.y, a7);
     Pixel a8; getSafeOrginalPixel(bottomRight.x, bottomRight.y, a8);
-pl;
 
     const int sobelVerticalY  = ((-a0.y  - 2*a1.y  - a2.y)  /* + 0*a3.y  + 0*a4.y  + 0*a5.y  */ + (a6.y  + 2*a7.y  + a8.y))  / 4;
     const int sobelVerticalCb = ((-a0.cb - 2*a1.cb - a2.cb) /* + 0*a3.cb + 0*a4.cb + 0*a5.cb */ + (a6.cb + 2*a7.cb + a8.cb)) / 4;
@@ -201,13 +197,13 @@ pl;
     const int sobelHorizontalY  = ((-a0.y  - 2*a3.y  - a6.y)  /* + 0*a1.y  + 0*a4.y  + 0*a7.y  */ + (a2.y  + 2*a5.y  + a8.y))  / 4;
     const int sobelHorizontalCb = ((-a0.cb - 2*a3.cb - a6.cb) /* + 0*a1.cb + 0*a4.cb + 0*a7.cb */ + (a2.cb + 2*a5.cb + a8.cb)) / 4;
     const int sobelHorizontalCr = ((-a0.cr - 2*a3.cr - a6.cr) /* + 0*a1.cr + 0*a4.cr + 0*a7.cr */ + (a2.cr + 2*a5.cr + a8.cr)) / 4;
-pl;
+
     Pixel result;
     result.cb = result.cr = 127; result.y = 1;
     const int ans = sqrt(
-                sobelVerticalY*sobelVerticalY + sobelVerticalCb*sobelVerticalCb + sobelVerticalCr*sobelVerticalCr +
-                sobelHorizontalY*sobelHorizontalY + sobelHorizontalCb*sobelHorizontalCb + sobelHorizontalCr*sobelHorizontalCr);
-pl;
+            sobelVerticalY*sobelVerticalY + sobelVerticalCb*sobelVerticalCb + sobelVerticalCr*sobelVerticalCr +
+            sobelHorizontalY*sobelHorizontalY + sobelHorizontalCb*sobelHorizontalCb + sobelHorizontalCr*sobelHorizontalCr);
+
     //-- Thresholding:
     if (ans > thresh) // [TODO] : make this threshold a configurable parameter.
     {
@@ -215,7 +211,7 @@ pl;
         _edgePoints.push_back(middle);
     }
     //-- else: result.y remain 1 which means that this pixel has been processed
-pl;
+
     return result;
 }
 

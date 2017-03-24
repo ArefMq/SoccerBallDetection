@@ -27,7 +27,7 @@ private slots:
 
 private:
     Ui::MainWindow *ui;
-    QImage monitor;
+    QImage monitor, edgeMonitor;
 
     Image image;
     BallDetector ballDetector;

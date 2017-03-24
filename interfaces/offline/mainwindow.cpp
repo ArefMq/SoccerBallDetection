@@ -3,6 +3,7 @@
 #include <iostream>
 #include <qpainter.h>
 
+#include "modules/EdgeImage.h"
 
 #define CLIP(X) ( (X) > 255 ? 255 : (X) < 0 ? 0 : X)
 
@@ -76,13 +77,16 @@ void MainWindow::on_pushButton_clicked()
     QPainter* qpn = new QPainter(&monitor);
 
     ballDetector.update(image);
+
+    edgeMonitor = image2qimage(ballDetector.debug_GetEdgeImage());
+
     typedef std::vector<Ball> Balls;
     const Balls& results = ballDetector.getResults();
     for (Balls::const_iterator itr=results.begin(); itr<results.end(); itr++)
     {
         const Ball& b = *itr;
         qpn->setPen(QPen(Qt::red, 3));
-        qpn->drawEllipse(QPoint(b.PositionInImage()._translation.x, b.PositionInImage()._translation.x), b.PositionInImage()._radious, b.PositionInImage()._radious);
+        qpn->drawEllipse(QPointF(b.PositionInImage()._translation.x, b.PositionInImage()._translation.x), b.PositionInImage()._radious, b.PositionInImage()._radious);
     }
 
     delete qpn;
@@ -94,8 +98,7 @@ void MainWindow::on_radioButton_clicked()
     if (ui->radioButton->isChecked())
         ui->monitor->setPixmap(QPixmap::fromImage(monitor));
     else
-        ;
-//        ui->monitor->setPixmap(QPixmap::fromImage(edgeMonitor));
+        ui->monitor->setPixmap(QPixmap::fromImage(edgeMonitor));
 }
 
 void MainWindow::on_radioButton_2_clicked()

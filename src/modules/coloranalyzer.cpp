@@ -1,3 +1,12 @@
+/**
+ * @file coloranalyzer.cpp
+ * This module analyze the image in order to find the field green color
+ * and calculate the field boundary.
+ *
+ * @author <a href="mailto:aref.moqadam@gmail.com">Aref Moqadam Mehr</a>
+ * @date March 2017
+ */
+
 #include "coloranalyzer.h"
 
 #include <iostream>
@@ -7,7 +16,6 @@
 ColorAnalyzer::ColorAnalyzer(const Image &InputImage) :
     _inputImage(InputImage)
 {
-    test = new int[256];
 }
 
 void ColorAnalyzer::update()
@@ -35,10 +43,7 @@ void ColorAnalyzer::histogramAnalysis()
             peak = i;
         }
 
-    for (int i=0; i<256; ++i)
-        test[i] = histogram[i];
-    test2 = peakValue;
-    greenPeak = peak;
+    _greenPeak = peak;
 }
 
 void ColorAnalyzer::fieldBoundaryDetection()
@@ -91,10 +96,8 @@ void ColorAnalyzer::fieldBoundaryDetection()
     }
     H.resize(k);
 
-    for (int x=0, i=0; x<_inputImage.width(); x++)
+    for (unsigned int x=0, i=0; x<_inputImage.width(); x++)
     {
-//        std::cout << "i " << i << "\tx : " << x << std::endl;
-
         if ((i >= H.size()) ||
             (i == 0 && x < H.at(i).x) ||
             (i == H.size()-1 && x > H.at(i).x))
@@ -126,7 +129,7 @@ void ColorAnalyzer::fieldBoundaryDetection()
 
 bool ColorAnalyzer::isGreen(int x, int y) const
 {
-    const int d = ((int)_inputImage.getPixel(x, y).cr - greenPeak);
+    const int d = ((int)_inputImage.getPixel(x, y).cr - _greenPeak);
     return (d < 10 && d > -10);
 }
 
