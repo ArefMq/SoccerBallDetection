@@ -20,8 +20,6 @@ BallDetector::~BallDetector()
     delete colorAnalyzer;
 }
 
-#include <iostream>
-
 void BallDetector::update(const Image& image)
 {
     _image = image;
@@ -42,8 +40,6 @@ void BallDetector::update(const Image& image)
         _results.push_back(ball);
 //        _previousPoints.push_back(ball.PositionInImage()._translation);
     }
-
-    std::cout << "c-size :: " << circles.size() << "\n";
 }
 
 const std::vector<Ball>& BallDetector::getResults() const
@@ -51,4 +47,7 @@ const std::vector<Ball>& BallDetector::getResults() const
     return _results;
 }
 
-EdgeImage BallDetector::debug_GetEdgeImage() { return *edgeImage; }
+EdgeImage BallDetector::debug_GetEdgeImage()
+{
+    return *edgeImage;
+}

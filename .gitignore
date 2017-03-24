@@ -34,3 +34,4 @@
 .cproject
 .project
 *.swp
+*build*

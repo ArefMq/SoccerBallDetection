@@ -77,8 +77,12 @@ void MainWindow::on_pushButton_clicked()
     QPainter* qpn = new QPainter(&monitor);
 
     ballDetector.update(image);
-
     edgeMonitor = image2qimage(ballDetector.debug_GetEdgeImage());
+//    for (int i=0; i<ballDetector.edgeImage->_scanGraphLookup.size(); ++i)
+//        for (int j=0; j<ballDetector.edgeImage->_scanGraphLookup.at(i).size(); ++j)
+//            edgeMonitor.setPixel(ballDetector.edgeImage->_scanGraphLookup.at(i).at(j).x,
+//                                 ballDetector.edgeImage->_scanGraphLookup.at(i).at(j).y,
+//                                 QColor(Qt::red).rgb());
 
     typedef std::vector<Ball> Balls;
     const Balls& results = ballDetector.getResults();
@@ -86,7 +90,7 @@ void MainWindow::on_pushButton_clicked()
     {
         const Ball& b = *itr;
         qpn->setPen(QPen(Qt::red, 3));
-        qpn->drawEllipse(QPointF(b.PositionInImage()._translation.x, b.PositionInImage()._translation.x), b.PositionInImage()._radious, b.PositionInImage()._radious);
+        qpn->drawEllipse(QPointF(b.PositionInImage()._translation.x, b.PositionInImage()._translation.y), b.PositionInImage()._radious, b.PositionInImage()._radious);
     }
 
     delete qpn;

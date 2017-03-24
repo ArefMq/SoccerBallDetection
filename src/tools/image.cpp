@@ -15,7 +15,7 @@ Image::Image(unsigned int width, unsigned int height) :
 Image::~Image()
 {
     if (data)
-        delete data;
+        delete[] data;
 }
 
 unsigned int Image::width() const
@@ -37,7 +37,7 @@ void Image::resize(unsigned int width, unsigned int height)
     _totalSize = _width * _height;
 
     if (data)
-        delete data;
+        delete[] data;
 
     data = new Pixel[_totalSize];
 }

@@ -48,6 +48,7 @@ void ColorAnalyzer::histogramAnalysis()
 
 void ColorAnalyzer::fieldBoundaryDetection()
 {
+    std::cout << "field boundary detection >> " << _inputImage.width() << std::endl;
     _boundaryPoints.resize(_inputImage.width(), 0);
 
     //-- Calculate Highest Points

@@ -25,6 +25,7 @@ FRHT::~FRHT()
 {
 }
 
+#include <iostream>
 void FRHT::update(std::vector<Vector2D> preferredRandomPoints)
 {
     _circles.clear();
@@ -36,7 +37,7 @@ void FRHT::update(std::vector<Vector2D> preferredRandomPoints)
     int edgePointsLastIndex = _image.edgePoints().size();
     while (preferredRandomPoints.size() < maxIterations)
     {
-        int randomID = rand() % edgePointsLastIndex;
+        const int randomID = rand() % edgePointsLastIndex;
         preferredRandomPoints.push_back(_image.edgePoints().at(randomID));
     }
 
@@ -58,7 +59,6 @@ void FRHT::update(std::vector<Vector2D> preferredRandomPoints)
         }
 
         findCircle(point, step);
-
     }
 }
 

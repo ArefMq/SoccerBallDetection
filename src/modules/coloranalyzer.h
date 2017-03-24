@@ -69,7 +69,7 @@ public:
     inline int boundary(int x) const { return _boundaryPoints.at(x < 0 ? 0 : (x >= (int)_inputImage.width() - 1 ? (int)_inputImage.width() - 1 : x)); }
 
 private:
-    const Image _inputImage; /**< Reference of the input image used for processing */
+    const Image& _inputImage; /**< Reference of the input image used for processing */
     int _greenPeak; /**< The value of Chroma (Cr) channel of the field-green color; peak of Cr histogram. Always between [0-255] */
     std::vector<int> _boundaryPoints; /**< Set of field boundary highest point for each column of the image. (Vector size = Image width) */
 

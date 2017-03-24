@@ -14,7 +14,7 @@
 // [FIXME] : make these parameters
 #define expStep__  0.1
 #define expCStep__ 0.88
-#define horizonOffset__ 30
+#define horizonOffset__ 110
 
 class EdgeImage : public Image
 {
