@@ -1,0 +1,19 @@
+1) Do something about the debugging:
+The debugger should be separate from main code, however a system should be
+available globally and internally for debugging. For further discussions 
+talk to me directly via email: aref.moqadam@gmail.com
+
+2) Configuration Files:
+Currently almost all of the parameters are done by c++ macros. ALL of these
+should be read from a config file instead. Some sort of ini file stream should
+be implemented (or some prior implementation should be used).
+
+3) FIXME refactor:
+Fix all the FIXMEs and TODOs in the code.
+
+4) Implement a better filter for edge detection
+
+5) Sort the detected:
+Sort the detected circles in ballDetector.cpp by a factor in order to deliver
+the best result (not the first one!).
+ 
