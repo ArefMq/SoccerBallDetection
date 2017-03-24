@@ -21,7 +21,7 @@ SOURCES += main.cpp\
     ../../src/tools/ball.cpp \
     ../../src/tools/vector2D.cpp \
     ../../src/modules/coloranalyzer.cpp \
-    ../../src/modules/EdgeImage.cpp \
+    ../../src/modules/edgeimage.cpp \
     ../../src/modules/FRHT.cpp \
     ../../src/modules/kinematicsprovider.cpp \
     ../../src/tools/vector3D.cpp
@@ -33,7 +33,7 @@ HEADERS  += mainwindow.h \
     ../../src/tools/ball.h \
     ../../src/tools/vector2D.h \
     ../../src/modules/coloranalyzer.h \
-    ../../src/modules/EdgeImage.h \
+    ../../src/modules/edgeimage.h \
     ../../src/modules/FRHT.h \
     ../../src/modules/kinematicsprovider.h \
     ../../src/tools/vector3D.h
