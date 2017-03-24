@@ -8,11 +8,11 @@
 #include <sys/time.h>
 
 BallDetector::BallDetector() :
+    _averageCycleTime(-1),
     colorAnalyzer(new ColorAnalyzer(_image)),
     edgeImage(new EdgeImage(_image)),
     houghTransform(new FRHT(*edgeImage)),
-    kinematicsProvider(new KinematicsProvider()),
-    _averageCycleTime(-1)
+    kinematicsProvider(new KinematicsProvider())
 {
 }
 
@@ -63,6 +63,10 @@ void BallDetector::update()
 
         //-- Check green percentage
         if (!checkWhitePercentage(circle._translation.x, circle._translation.y, circle._radious))
+            continue;
+
+        //-- Check ball pattern
+        if (!checkBallTexture(circle))
             continue;
 
         //-- Deliver the results
@@ -128,4 +132,10 @@ EdgeImage BallDetector::debug_GetEdgeImage()
 double BallDetector::averageCycleTime() const
 {
     return _averageCycleTime;
+}
+
+bool BallDetector::checkBallTexture(const Circle& ball)
+{
+    // [TODO] : implement this function
+    return true;
 }

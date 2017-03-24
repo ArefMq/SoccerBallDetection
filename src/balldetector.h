@@ -67,6 +67,13 @@ private:
 	 * @return +1 if the pixel is valid (it is inside the image); 0 otherwise
 	 */
 	int searchedColor(int x, int y, int& color, int& nonGreen);
+	/**
+	 * @brief check the ball texture via machine learning to see if it matches
+	 * the previously trained ball data.
+	 * @param ball: the given position to check
+	 * @return true if the texture matches the ball
+	 */
+	bool checkBallTexture(const Circle& ball);
 };
 
 #endif
