@@ -4,11 +4,15 @@
 #include "modules/FRHT.h"
 #include "modules/kinematicsprovider.h"
 
+#include <iostream>
+#include <sys/time.h>
+
 BallDetector::BallDetector() :
     colorAnalyzer(new ColorAnalyzer(_image)),
     edgeImage(new EdgeImage(_image)),
     houghTransform(new FRHT(*edgeImage)),
-    kinematicsProvider(new KinematicsProvider())
+    kinematicsProvider(new KinematicsProvider()),
+    _averageCycleTime(-1)
 {
 }
 
@@ -25,6 +29,22 @@ void BallDetector::update(const Image& image)
     _image = image;
     _results.clear();
 
+    struct timeval  tv1, tv2;
+    gettimeofday(&tv1, NULL);
+
+    update();
+
+    gettimeofday(&tv2, NULL);
+
+    double cycleTime = (double) (tv2.tv_usec - tv1.tv_usec) / 1000000.0 + (double) (tv2.tv_sec - tv1.tv_sec);
+    if (_averageCycleTime == -1)
+        _averageCycleTime = cycleTime;
+    else
+        _averageCycleTime = _averageCycleTime * 0.95 + cycleTime * 0.5;
+}
+
+void BallDetector::update()
+{
     colorAnalyzer->update();
     edgeImage->update();
     houghTransform->update(_previousPoints);
@@ -103,4 +123,9 @@ const std::vector<Ball>& BallDetector::getResults() const
 EdgeImage BallDetector::debug_GetEdgeImage()
 {
     return *edgeImage;
+}
+
+double BallDetector::averageCycleTime() const
+{
+    return _averageCycleTime;
 }

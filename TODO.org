@@ -1,7 +1,7 @@
 1) Do something about the debugging:
 The debugger should be separate from main code, however a system should be
 available globally and internally for debugging. For further discussions 
-talk to me directly via email: aref.moqadam@gmail.com
+talk to me directly via email: aref.moqadam@gmail.com.
 
 2) Configuration Files:
 Currently almost all of the parameters are done by c++ macros. ALL of these
@@ -16,4 +16,8 @@ Fix all the FIXMEs and TODOs in the code.
 5) Sort the detected:
 Sort the detected circles in ballDetector.cpp by a factor in order to deliver
 the best result (not the first one!).
- 
+
+6) Test the code on different platforms
+Try to build the code in different platforms (different c-compilers such as
+clang c++-11 c++9 c++9.8 etc. with different libc versions in different 
+operating system) and fix any upcoming issues.
