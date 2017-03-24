@@ -31,6 +31,9 @@ private:
 	EdgeImage*          edgeImage;
 	FRHT*               houghTransform;
 	KinematicsProvider* kinematicsProvider;
+
+	bool checkWhitePercentage(int cx, int cy, int r);
+	int searchedColor(int x, int y, int& color, int& nonGreen);
 };
 
 #endif
