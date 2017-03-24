@@ -1,0 +1,8 @@
+1) the program has a segmentation fault when the refresh button is pressed.
+the fault accured in FRHT update function when the prefered_point vector is 
+being filled. Even if the enitre data is correct but the program can not push 
+the data through the vector and fault with a error when trying to create a new 
+instance of the data.
+
+2) The program has a segmentation fault when exiting the program.
+The image can not delete the data array insied it.
