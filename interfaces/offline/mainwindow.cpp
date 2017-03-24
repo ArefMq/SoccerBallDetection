@@ -3,7 +3,7 @@
 #include <iostream>
 #include <qpainter.h>
 
-#include "modules/EdgeImage.h"
+#include "modules/edgeimage.h"
 
 #define CLIP(X) ( (X) > 255 ? 255 : (X) < 0 ? 0 : X)
 
