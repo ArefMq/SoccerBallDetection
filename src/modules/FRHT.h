@@ -7,7 +7,7 @@
 
 #pragma once
 
-#include "EdgeImage.h"
+#include "edgeimage.h"
 #include "circle.h"
 #include "coloranalyzer.h"
 

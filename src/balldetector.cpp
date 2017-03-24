@@ -1,6 +1,6 @@
 #include "balldetector.h"
 #include "modules/coloranalyzer.h"
-#include "modules/EdgeImage.h"
+#include "modules/edgeimage.h"
 #include "modules/FRHT.h"
 #include "modules/kinematicsprovider.h"
 
