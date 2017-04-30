@@ -30,6 +30,7 @@ FRHT::~FRHT()
 void FRHT::update(std::vector<Vector2D> preferredRandomPoints)
 {
     _circles.clear();
+    std::vector<Vector2D> randomPoints;
 
     if (!_image.edgePoints().size())
         return;
@@ -37,20 +38,28 @@ void FRHT::update(std::vector<Vector2D> preferredRandomPoints)
     const int maxIterations = FRHT_ITERATIONS; // [FIXME] : This could be a function of the camera tilt
     int edgePointsLastIndex = _image.edgePoints().size();
 
-//    int _i = 0;
-    while (preferredRandomPoints.size() < maxIterations)
+    while (randomPoints.size() < maxIterations)
     {
-//        std::cout << "inwiles " << _i++ << "(" << preferredRandomPoints.size() << ")\n";
-        const int randomID = rand() % edgePointsLastIndex;
-        const Vector2D& p = _image.edgePoints().at(randomID);
+        Vector2D p;
+        if ((randomPoints.size() < maxIterations*0.5) || (!preferredRandomPoints.size()))
+        {
+            const int randomID = rand() % edgePointsLastIndex;
+            p = _image.edgePoints().at(randomID);
+        }
+        else
+        {
+            const int randomID = rand() % preferredRandomPoints.size();
+            p = preferredRandomPoints.at(randomID);
+            preferredRandomPoints.erase(preferredRandomPoints.begin() + randomID);
+        }
 
-        preferredRandomPoints.push_back(p);
+        randomPoints.push_back(p);
     }
-//    std::cout << "and finally -----> " << preferredRandomPoints.size() << "\n";
 
-    for (unsigned int i=0; i<preferredRandomPoints.size(); ++i)
+
+    for (unsigned int i=0; i<randomPoints.size(); ++i)
     {
-        Vector2D& point = preferredRandomPoints.at(i);
+        Vector2D& point = randomPoints.at(i);
         int step = EdgeImage::edgeingStep(point.y-_image.originY) / 2;
 
         edgePointsLastIndex = _image.edgePoints().size();
@@ -202,4 +211,9 @@ void FRHT::resizeCirlcle(Circle &circle, int maxBoundary, const ColorAnalyzer& c
 
     if (searchPoints.size() > 2)
         circle = FRHT::fitACircle(searchPoints.at(0), searchPoints.at(1), searchPoints.at(2));
+
+
+#undef AFTER_SEARCH
+#undef SEARCH
+#undef IN_IMAGE
 }
