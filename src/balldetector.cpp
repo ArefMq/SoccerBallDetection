@@ -76,6 +76,7 @@ void BallDetector::update()
         _results.push_back(ball);
 //        _previousPoints.push_back(ball.PositionInImage()._translation);
     }
+//    std::cout << _previousPoints.size() << "\n";
 }
 
 bool BallDetector::checkWhitePercentage(int cx, int cy, int r)

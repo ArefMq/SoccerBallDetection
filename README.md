@@ -52,7 +52,7 @@ Then, make an instance of it and call the `update` function and pass the image t
 Finally, the results will be accessible by `getResult` function.
 
 ## Contacts:
-Please let me know about any comment you might have about this project.
+Please let me know about any comment you might have about this project. <br/>
 Aref Moqadam Mehr (a.moqadam@mrl-spl.ir)
 
 
