@@ -1,5 +1,7 @@
 #include "vector3D.h"
 
+using namespace MVision;
+
 Vector3D::Vector3D() : Vector2D(), z(0)
 {
 }

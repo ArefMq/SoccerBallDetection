@@ -16,6 +16,8 @@
 #define expCStep__ 0.88
 #define horizonOffset__ 110
 
+namespace MVision {
+
 class EdgeImage : public Image
 {
 public:
@@ -123,3 +125,4 @@ private:
         return (_scanGraphLookup.at(row).at(col).y+originY);
     }
 };
+}

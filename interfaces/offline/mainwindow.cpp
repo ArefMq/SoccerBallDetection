@@ -33,6 +33,7 @@
 
 
 using namespace std;
+using namespace MVision;
 
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),

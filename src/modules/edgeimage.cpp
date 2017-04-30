@@ -9,6 +9,8 @@
 #include <iostream>
 #include <cmath>
 
+using namespace MVision;
+
 Image::Pixel EdgeImage::black;
 Image::Pixel EdgeImage::red;
 float EdgeImage::expStep;

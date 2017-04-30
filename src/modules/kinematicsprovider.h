@@ -1,7 +1,7 @@
 #ifndef KINEMATICSPROVIDER_H
 #define KINEMATICSPROVIDER_H
 
-
+namespace MVision {
 class KinematicsProvider
 {
 public:
@@ -9,5 +9,6 @@ public:
 
     int getHorizon() { return 100; }
 };
+}
 
 #endif // KINEMATICSPROVIDER_H

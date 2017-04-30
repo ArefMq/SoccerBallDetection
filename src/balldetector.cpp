@@ -7,6 +7,8 @@
 #include <iostream>
 #include <sys/time.h>
 
+using namespace MVision;
+
 BallDetector::BallDetector() :
     _averageCycleTime(-1),
     colorAnalyzer(new ColorAnalyzer(_image)),

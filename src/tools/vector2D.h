@@ -3,6 +3,7 @@
 
 #include <cmath>
 
+namespace MVision {
 class Vector2D
 {
 public:
@@ -113,5 +114,5 @@ public:
         return x < p.x || (x == p.x && y < p.y);
     }
 };
-
+}
 #endif // VECTOR2D_H

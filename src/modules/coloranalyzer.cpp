@@ -13,6 +13,8 @@
 #include <cmath>
 #include <algorithm>
 
+using namespace MVision;
+
 ColorAnalyzer::ColorAnalyzer(const Image &InputImage) :
     _inputImage(InputImage)
 {

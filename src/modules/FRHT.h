@@ -11,6 +11,8 @@
 #include "circle.h"
 #include "coloranalyzer.h"
 
+namespace MVision {
+
 class FRHT
 {
 public:
@@ -84,3 +86,4 @@ public:
      */
     static Circle fitACircle(const Vector2D& p1, const Vector2D& p2, const Vector2D& p3);
 };
+}

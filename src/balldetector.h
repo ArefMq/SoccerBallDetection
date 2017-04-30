@@ -6,6 +6,8 @@
 
 #include <vector>
 
+namespace MVision {
+
 class ColorAnalyzer;
 class EdgeImage;
 class FRHT;
@@ -75,5 +77,6 @@ private:
 	 */
 	bool checkBallTexture(const Circle& ball);
 };
+}
 
 #endif

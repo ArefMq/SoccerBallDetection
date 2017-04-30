@@ -3,6 +3,7 @@
 
 #include "vector2D.h"
 
+namespace MVision {
 class Circle
 {
 //private:
@@ -39,6 +40,6 @@ public:
         return _translation != other._translation || _radious != other._radious;
     }
 };
-
+}
 
 #endif // CIRCLE_H

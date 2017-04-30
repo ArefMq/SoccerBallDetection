@@ -1,5 +1,7 @@
 #include "ball.h"
 
+using namespace MVision;
+
 Ball::Ball(const Circle& position, float Confidence) :
     _positionInImage(position),
     _confidence(Confidence)

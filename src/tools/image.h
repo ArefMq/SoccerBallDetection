@@ -6,6 +6,8 @@
 # include <iostream>
 #endif
 
+namespace MVision {
+
 class Image
 {
 public:
@@ -60,5 +62,6 @@ private:
     Pixel* data;
 #endif
 };
+}
 
 #endif // IMAGE_H

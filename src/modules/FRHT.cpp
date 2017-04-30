@@ -11,6 +11,8 @@
 #include <stdlib.h>
 #include <vector>
 
+using namespace MVision;
+
 // [TODO] : make these configurable parameters
 //#define FRHT_ITERATIONS 150
 #define FRHT_ITERATIONS 150

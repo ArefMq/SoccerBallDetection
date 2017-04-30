@@ -1,6 +1,8 @@
 #include "image.h"
 #include <iostream>
 
+using namespace MVision;
+
 Image::Image() :
     _totalSize(0), _width(0), _height(0), data(0)
 {

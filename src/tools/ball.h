@@ -3,6 +3,8 @@
 
 #include "circle.h"
 
+namespace MVision {
+
 class Ball
 {
 public:
@@ -17,5 +19,6 @@ private:
 	Circle _positionInImage;
 	float _confidence;
 };
+}
 
 #endif // BALL_H
