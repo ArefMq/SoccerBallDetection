@@ -25,6 +25,7 @@ SOURCES += main.cpp\
     ../../src/modules/edgeimage.cpp \
     ../../src/modules/FRHT.cpp \
     ../../src/modules/kinematicsprovider.cpp \
+    ../../src/modules/patternrecognizer.cpp \
     ../../src/tools/vector3D.cpp
 
 HEADERS  += mainwindow.h \
@@ -37,6 +38,7 @@ HEADERS  += mainwindow.h \
     ../../src/modules/edgeimage.h \
     ../../src/modules/FRHT.h \
     ../../src/modules/kinematicsprovider.h \
+    ../../src/modules/patternrecognizer.h \
     ../../src/tools/vector3D.h
 
 FORMS    += mainwindow.ui

@@ -12,6 +12,7 @@ class ColorAnalyzer;
 class EdgeImage;
 class FRHT;
 class KinematicsProvider;
+class PatternRecognizer;
 
 class BallDetector
 {
@@ -49,6 +50,7 @@ private:
 	EdgeImage*          edgeImage;
 	FRHT*               houghTransform;
 	KinematicsProvider* kinematicsProvider;
+	PatternRecognizer*  patternRecognizer;
 
 	/**
 	 * @brief run the process need to detect a ball in the image

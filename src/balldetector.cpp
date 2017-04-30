@@ -3,6 +3,7 @@
 #include "modules/edgeimage.h"
 #include "modules/FRHT.h"
 #include "modules/kinematicsprovider.h"
+#include "modules/patternrecognizer.h"
 
 #include <iostream>
 #include <sys/time.h>
@@ -14,12 +15,14 @@ BallDetector::BallDetector() :
     colorAnalyzer(new ColorAnalyzer(_image)),
     edgeImage(new EdgeImage(_image)),
     houghTransform(new FRHT(*edgeImage)),
-    kinematicsProvider(new KinematicsProvider())
+    kinematicsProvider(new KinematicsProvider()),
+    patternRecognizer(new PatternRecognizer())
 {
 }
 
 BallDetector::~BallDetector()
 {
+    delete patternRecognizer;
     delete kinematicsProvider;
     delete houghTransform;
     delete edgeImage;
@@ -138,6 +141,5 @@ double BallDetector::averageCycleTime() const
 
 bool BallDetector::checkBallTexture(const Circle& ball)
 {
-    // [TODO] : implement this function
-    return true;
+    return patternRecognizer->predict(_image, ball, PatternRecognizer::Ball);
 }
