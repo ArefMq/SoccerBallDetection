@@ -25,7 +25,6 @@ FRHT::~FRHT()
 {
 }
 
-#include <iostream>
 void FRHT::update(std::vector<Vector2D> preferredRandomPoints)
 {
     _circles.clear();
@@ -35,10 +34,13 @@ void FRHT::update(std::vector<Vector2D> preferredRandomPoints)
 
     const int maxIterations = FRHT_ITERATIONS; // [FIXME] : This could be a function of the camera tilt
     int edgePointsLastIndex = _image.edgePoints().size();
+
     while (preferredRandomPoints.size() < maxIterations)
     {
         const int randomID = rand() % edgePointsLastIndex;
-        preferredRandomPoints.push_back(_image.edgePoints().at(randomID));
+        const Vector2D& p = _image.edgePoints().at(randomID);
+
+        preferredRandomPoints.push_back(p);
     }
 
     for (unsigned int i=0; i<preferredRandomPoints.size(); ++i)
@@ -67,12 +69,10 @@ void FRHT::findCircle(const Vector2D& centerPoint, int step)
     std::vector<SearchCell> searchPoints;
 
     // [FIXME] : there is a bug here, sometimes one point is pushed in some place with no edge in.
-
-
     for (int y=centerPoint.y-step; y<centerPoint.y+step; ++y)
         for (int x=centerPoint.x-step; x<centerPoint.x+step; ++x)
         {
-            if (x < 0 || y < 0 || x > (int)_image.width() || y > (int)_image.height())
+            if (x < 0 || y < 0 || x >= (int)_image.width() || y >= (int)_image.height())
                 continue;
 
             if (_image.getPixel(x, y).y < 127)
@@ -85,7 +85,7 @@ void FRHT::findCircle(const Vector2D& centerPoint, int step)
                 if (sp->distance == distance)
                 {
                     checkCircle(centerPoint, sp->point, Vector2D(x, y));
-                    //          return; // [FIXME] : check to see if it better to stop after first distance pair or not.
+//                    return; // [FIXME] : check to see if it better to stop after first distance pair or not.
                 }
 
             searchPoints.push_back(SearchCell(distance, Vector2D(x, y)));
@@ -96,18 +96,18 @@ void FRHT::findCircle(const Vector2D& centerPoint, int step)
 void FRHT::checkCircle(const Vector2D& p1, const Vector2D& p2, const Vector2D& p3)
 {
     Circle circle = fitACircle(p1, p2, p3);
-    if (isnan(circle._translation.x))
+    if (std::isnan(circle._translation.x))
         return;
-    if (isnan(circle._translation.y))
+    if (std::isnan(circle._translation.y))
         return;
-    if (isnan(circle._radious))
+    if (std::isnan(circle._radious))
         return;
 
-    if (isinf(circle._translation.x))
+    if (std::isinf(circle._translation.x))
         return;
-    if (isinf(circle._translation.y))
+    if (std::isinf(circle._translation.y))
         return;
-    if (isinf(circle._radious))
+    if (std::isinf(circle._radious))
         return;
 
     _circles.push_back(circle);
@@ -152,57 +152,61 @@ Circle FRHT::fitACircle(const Vector2D& p1, const Vector2D& p2, const Vector2D& 
 
 void FRHT::resizeCirlcle(Circle &circle, int maxBoundary, const ColorAnalyzer& colorAnalyzer)
 {
-    int noise, itr;
+//    std::cout << "implement...\n";
+    return;
 
-    const int maxSearchSpace = 100; //-- px
-
-    //-- Upper Search
-    Vector2D p1(circle._translation.x, circle._translation.y-circle._radious);
-    noise = 0;
-    itr = 0;
-    for (; p1.y > 0 && itr < maxSearchSpace && p1.y > maxBoundary && noise < 3; p1.y--, itr++)
-        if (colorAnalyzer.isGreen(p1.x, p1.y))
-            noise++;
-        else
-            noise=0;
-#ifdef USE_EDGE_TO_REFINE
-    while (edgeImage[p1.y][p1.x].y < 64)
-        p1.y++;
-#else
-    p1.y += noise;
-#endif
-
-    //-- Left Search
-    Vector2D p2(circle._translation.x-circle._radious, circle._translation.y);
-    noise = 0;
-    itr = 0;
-    for (; p2.x > 0 && itr < maxSearchSpace && noise < 3; p2.x--, itr++)
-        if (colorAnalyzer.isGreen(p2.x, p2.y))
-            noise++;
-        else
-            noise=0;
-#ifdef USE_EDGE_TO_REFINE
-    while (edgeImage[p2.y][p2.x].y < 64)
-        p2.x++;
-#else
-    p2.x += noise;
-#endif
-
-    //-- Right Search
-    Vector2D p3(circle._translation.x+circle._radious, circle._translation.y);
-    noise = 0;
-    itr = 0;
-    for (; p3.x < _image.width() && itr < maxSearchSpace && noise < 3; p3.x++, itr++)
-        if (colorAnalyzer.isGreen(p3.x, p3.y))
-            noise++;
-        else
-            noise=0;
-#ifdef USE_EDGE_TO_REFINE
-    while (edgeImage[p3.y][p3.x].y < 64)
-        p3.x--;
-#else
-    p3.x -= noise;
-#endif
-
-    circle = FRHT::fitACircle(p1, p2, p3);
+//
+//    int noise, itr;
+//
+//    const int maxSearchSpace = 100; //-- px
+//
+//    //-- Upper Search
+//    Vector2D p1(circle._translation.x, circle._translation.y-circle._radious);
+//    noise = 0;
+//    itr = 0;
+//    for (; p1.y > 0 && itr < maxSearchSpace && p1.y > maxBoundary && noise < 3; p1.y--, itr++)
+//        if (colorAnalyzer.isGreen(p1.x, p1.y))
+//            noise++;
+//        else
+//            noise=0;
+//#ifdef USE_EDGE_TO_REFINE
+//    while (edgeImage[p1.y][p1.x].y < 64)
+//        p1.y++;
+//#else
+//    p1.y += noise;
+//#endif
+//
+//    //-- Left Search
+//    Vector2D p2(circle._translation.x-circle._radious, circle._translation.y);
+//    noise = 0;
+//    itr = 0;
+//    for (; p2.x > 0 && itr < maxSearchSpace && noise < 3; p2.x--, itr++)
+//        if (colorAnalyzer.isGreen(p2.x, p2.y))
+//            noise++;
+//        else
+//            noise=0;
+//#ifdef USE_EDGE_TO_REFINE
+//    while (edgeImage[p2.y][p2.x].y < 64)
+//        p2.x++;
+//#else
+//    p2.x += noise;
+//#endif
+//
+//    //-- Right Search
+//    Vector2D p3(circle._translation.x+circle._radious, circle._translation.y);
+//    noise = 0;
+//    itr = 0;
+//    for (; p3.x < _image.width() && itr < maxSearchSpace && noise < 3; p3.x++, itr++)
+//        if (colorAnalyzer.isGreen(p3.x, p3.y))
+//            noise++;
+//        else
+//            noise=0;
+//#ifdef USE_EDGE_TO_REFINE
+//    while (edgeImage[p3.y][p3.x].y < 64)
+//        p3.x--;
+//#else
+//    p3.x -= noise;
+//#endif
+//
+//    circle = FRHT::fitACircle(p1, p2, p3);
 }

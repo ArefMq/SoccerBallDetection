@@ -33,8 +33,6 @@ EdgeImage::~EdgeImage()
 
 void EdgeImage::createLookup()
 {
-    std::cout << "creating edge lookup table..." << std::endl;
-
     _scanGraphLookup.clear();
     resize(_image.width(), _image.height());
 
@@ -85,7 +83,6 @@ void EdgeImage::refine(const Vector2D& topLeft, const Vector2D& bottomRight)
                 setSafePixel(middle.x, middle.y, (edgePixel.y>140)?red:black);
             }
         }
-
 }
 
 void EdgeImage::refine(const Vector2D& point)
@@ -162,13 +159,14 @@ void EdgeImage::update()
 
 Image::Pixel EdgeImage::calculateEdge(const Vector2D& topLeft, const Vector2D& middle, const Vector2D& bottomRight, int thresh)
 {
+#ifdef DEBUG
     if (topLeft.x < 0 || topLeft.x >= _width || topLeft.y < 0 || topLeft.y >= _height)
-        std::cout << "invalid injection => top left...     (" << topLeft.x << ", " << topLeft.y << ") - (" << middle.x << ", " << middle.y << ") - (" << bottomRight.x << ", " << bottomRight.y << ")" << std::endl;
+        std::cerr << "invalid injection => top left...     (" << topLeft.x << ", " << topLeft.y << ") - (" << middle.x << ", " << middle.y << ") - (" << bottomRight.x << ", " << bottomRight.y << ")" << std::endl;
     if (middle.x < 0 || middle.x >= _width || middle.y < 0 || middle.y >= _height)
-        std::cout << "invalid injection => middle...       (" << topLeft.x << ", " << topLeft.y << ") - (" << middle.x << ", " << middle.y << ") - (" << bottomRight.x << ", " << bottomRight.y << ")" << std::endl;
+        std::cerr << "invalid injection => middle...       (" << topLeft.x << ", " << topLeft.y << ") - (" << middle.x << ", " << middle.y << ") - (" << bottomRight.x << ", " << bottomRight.y << ")" << std::endl;
     if (bottomRight.x < 0 || bottomRight.x >= _width || bottomRight.y < 0 || bottomRight.y >= _height)
-        std::cout << "invalid injection => bottom right... (" << topLeft.x << ", " << topLeft.y << ") - (" << middle.x << ", " << middle.y << ") - (" << bottomRight.x << ", " << bottomRight.y << ")" << std::endl;
-
+        std::cerr << "invalid injection => bottom right... (" << topLeft.x << ", " << topLeft.y << ") - (" << middle.x << ", " << middle.y << ") - (" << bottomRight.x << ", " << bottomRight.y << ")" << std::endl;
+#endif
     // [TODO] : implement a better filter
 
     //-- Implementation of Sobel Filter

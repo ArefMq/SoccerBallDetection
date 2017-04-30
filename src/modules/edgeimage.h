@@ -81,9 +81,45 @@ private:
      */
     Pixel calculateEdge(const Vector2D& topLeft, const Vector2D& middle, const Vector2D& bottomRight, int thresh=60);
 
-    inline void getSafePixel(int x, int y, Pixel& getValue) { if (x < (int)_width && x > -1 && y < (int)_height && y > -1) { getValue = getPixel(x, y); } }
-    inline void setSafePixel(int x, int y, const Pixel& setValue) { if (x < (int)_width && x > -1 && y < (int)_height && y > -1) { getPixel(x, y) = setValue; } }
-    inline void getSafeOrginalPixel(int x, int y, Pixel& getValue) { if (x < (int)_width && x > -1 && y < (int)_height && y > -1) { getValue = _image.getPixel(x, y); } }
-    inline float stepTable_X(int row, int col) { return _scanGraphLookup.at(row).at(col).x; }
-    inline float stepTable_Y(int row, int col) { return (_scanGraphLookup.at(row).at(col).y+originY); }
+    inline void getSafePixel(int x, int y, Pixel& getValue)
+    {
+        if (x < (int)_width && x > -1 && y < (int)_height && y > -1)
+        {
+            getValue = getPixel(x, y);
+        }
+    }
+
+    inline void setSafePixel(int x, int y, const Pixel& setValue)
+    {
+        if (x < (int)_width && x > -1 && y < (int)_height && y > -1)
+        {
+            getPixel(x, y) = setValue;
+        }
+    }
+
+    inline void getSafeOrginalPixel(int x, int y, Pixel& getValue)
+    {
+        if (x < (int)_width && x > -1 && y < (int)_height && y > -1)
+        {
+            getValue = _image.getPixel(x, y);
+        }
+    }
+
+    inline float stepTable_X(int row, int col)
+    {
+#ifdef DEBUG
+        if (row < 0 || col < 0 || row >= (int)_scanGraphLookup.size() || col >= (int)_scanGraphLookup.at(row).size())
+            std::cerr << "invalid indexing..." << __FILE__ << " :: " << __LINE__ << "\n(" << row << ", " << col << ")\n";
+#endif
+        return _scanGraphLookup.at(row).at(col).x;
+    }
+
+    inline float stepTable_Y(int row, int col)
+    {
+#ifdef DEBUG
+        if (row < 0 || col < 0 || row >= (int)_scanGraphLookup.size() || col >= (int)_scanGraphLookup.at(row).size())
+            std::cerr << "invalid indexing..." << __FILE__ << " :: " << __LINE__ << "\n(" << row << ", " << col << ")\n";
+#endif
+        return (_scanGraphLookup.at(row).at(col).y+originY);
+    }
 };

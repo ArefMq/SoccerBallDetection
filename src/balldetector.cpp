@@ -41,6 +41,7 @@ void BallDetector::update(const Image& image)
         _averageCycleTime = cycleTime;
     else
         _averageCycleTime = _averageCycleTime * 0.95 + cycleTime * 0.5;
+
 }
 
 void BallDetector::update()
@@ -54,7 +55,6 @@ void BallDetector::update()
     for (std::vector<Circle>::const_iterator itr = circles.begin(); itr < circles.end(); itr++)
     {
         Circle circle = *itr;
-
         houghTransform->resizeCirlcle(circle, colorAnalyzer->boundary(circle._translation.x) /*kinematicsProvider.getHorizon()*/, *colorAnalyzer);
 
         //-- First Step Size Check

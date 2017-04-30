@@ -5,12 +5,14 @@
 #-------------------------------------------------
 
 QT       += core gui
-DEFINES += DEBUG
 
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
+DEFINES += DEBUG
+
 TARGET = ballDetection
 TEMPLATE = app
+QMAKE_CXXFLAGS += -std=c++11
 
 INCLUDEPATH += ../../src/ ../../src/tools/
 
@@ -25,7 +27,8 @@ SOURCES += main.cpp\
     ../../src/modules/edgeimage.cpp \
     ../../src/modules/FRHT.cpp \
     ../../src/modules/kinematicsprovider.cpp \
-    ../../src/tools/vector3D.cpp
+    ../../src/tools/vector3D.cpp \
+    webcam.cpp
 
 HEADERS  += mainwindow.h \
     ../../src/tools/image.h \
@@ -37,6 +40,7 @@ HEADERS  += mainwindow.h \
     ../../src/modules/edgeimage.h \
     ../../src/modules/FRHT.h \
     ../../src/modules/kinematicsprovider.h \
-    ../../src/tools/vector3D.h
+    ../../src/tools/vector3D.h \
+    webcam.h
 
 FORMS    += mainwindow.ui

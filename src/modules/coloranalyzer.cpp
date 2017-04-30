@@ -48,7 +48,6 @@ void ColorAnalyzer::histogramAnalysis()
 
 void ColorAnalyzer::fieldBoundaryDetection()
 {
-    std::cout << "field boundary detection >> " << _inputImage.width() << std::endl;
     _boundaryPoints.resize(_inputImage.width(), 0);
 
     //-- Calculate Highest Points
@@ -56,7 +55,7 @@ void ColorAnalyzer::fieldBoundaryDetection()
     for (unsigned int x=0; x<_inputImage.width(); ++x)
     {
         int noise=0, whiteSkip=0;
-        int y=_inputImage.height();
+        int y=_inputImage.height()-1;
         for (; y > 0; --y)
         {
             if (isGreen(x, y))
@@ -80,6 +79,7 @@ void ColorAnalyzer::fieldBoundaryDetection()
         if (y > 100) // [FIXME] : [FIXME] : change this with horizon
             highestPoints.push_back(Vector2D(x, y));
     }
+
 
     //-- Andrew's Monotone Algorithm
     int n = highestPoints.size(), k = 0;
@@ -124,7 +124,6 @@ void ColorAnalyzer::fieldBoundaryDetection()
             std::cerr << "fault detected... [" << __FILE__ << " :: " << __LINE__
                       << "]\n\tDetail:" << x << " => (" << H.at(i).x << ", "
                       << H.at(i).y << ") -- i:" << i << std::endl;
-
     }
 }
 
