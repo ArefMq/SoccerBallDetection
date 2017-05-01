@@ -36,7 +36,7 @@
 #define CYCbCr2G(Y, Cb, Cr) CLIP( Y - (( 22544 * Cb + 46793 * Cr ) >> 16) + 135)
 #define CYCbCr2B(Y, Cb, Cr) CLIP( Y + (116129 * Cb >> 16 ) - 226 )
 
-
+using namespace MVision;
 using namespace std;
 
 MainWindow::MainWindow(QWidget *parent) :

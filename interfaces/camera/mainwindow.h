@@ -27,12 +27,12 @@ private:
     Ui::MainWindow *ui;
     QImage monitor, edgeMonitor;
 
-    Image image;
-    BallDetector ballDetector;
+    MVision::Image image;
+    MVision::BallDetector ballDetector;
     bool imageLuck;
 
     //-- Utulity Functions
-    static QImage image2qimage(const Image& img);
+    static QImage image2qimage(const MVision::Image& img);
     bool loadImage();
 
     //-- Camera part

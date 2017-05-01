@@ -41,7 +41,7 @@ void FRHT::update(std::vector<Vector2D> preferredRandomPoints)
     while (randomPoints.size() < maxIterations)
     {
         Vector2D p;
-        if ((randomPoints.size() < maxIterations*0.5) || (!preferredRandomPoints.size()))
+        if ((randomPoints.size() < maxIterations*0.8) || (!preferredRandomPoints.size()))
         {
             const int randomID = rand() % edgePointsLastIndex;
             p = _image.edgePoints().at(randomID);

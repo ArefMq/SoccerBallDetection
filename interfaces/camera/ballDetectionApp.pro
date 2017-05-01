@@ -5,6 +5,7 @@
 #-------------------------------------------------
 
 QT       += core gui
+DEFINES += DEBUG
 
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
@@ -15,6 +16,19 @@ TEMPLATE = app
 QMAKE_CXXFLAGS += -std=c++11
 
 INCLUDEPATH += ../../src/ ../../src/tools/
+
+LIBS += -lm \
+        -lopencv_core \
+        -lopencv_imgproc \
+        -lopencv_highgui \
+        -lopencv_ml \
+        -lopencv_video \
+        -lopencv_features2d \
+        -lopencv_calib3d \
+        -lopencv_objdetect \
+        -lopencv_contrib \
+        -lopencv_legacy \
+        -lopencv_stitching
 
 SOURCES += main.cpp\
         mainwindow.cpp \
@@ -27,6 +41,7 @@ SOURCES += main.cpp\
     ../../src/modules/edgeimage.cpp \
     ../../src/modules/FRHT.cpp \
     ../../src/modules/kinematicsprovider.cpp \
+    ../../src/modules/patternrecognizer.cpp \
     ../../src/tools/vector3D.cpp \
     webcam.cpp
 
@@ -40,6 +55,7 @@ HEADERS  += mainwindow.h \
     ../../src/modules/edgeimage.h \
     ../../src/modules/FRHT.h \
     ../../src/modules/kinematicsprovider.h \
+    ../../src/modules/patternrecognizer.h \
     ../../src/tools/vector3D.h \
     webcam.h
 
