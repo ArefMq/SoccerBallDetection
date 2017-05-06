@@ -18,6 +18,7 @@ BallDetector::BallDetector() :
     kinematicsProvider(new KinematicsProvider()),
     patternRecognizer(new PatternRecognizer())
 {
+    patternRecognizer->load();
 }
 
 BallDetector::~BallDetector()

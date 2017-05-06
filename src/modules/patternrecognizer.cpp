@@ -26,7 +26,7 @@ PatternRecognizer::~PatternRecognizer()
 
 void PatternRecognizer::load()
 {
-    boostTrainer->load("boost-config-file","boost");
+    boostTrainer->load("/home/aref/workspace/humanoid/SoccerBallDetection/config/boostModel.xml","boost");
 }
 
 #define CV_WIN_SIZE 128
@@ -56,8 +56,6 @@ Mat PatternRecognizer::getGrayROI(const Image& image, const Circle& ROI)
 
 bool PatternRecognizer::predict(const Image& image, const Circle& ROI, Pattern )
 {
-    return true;
-
     Mat grayROIImage = getGrayROI(image, ROI);
 
     static const Size trainingPadding = Size(0, 0);
