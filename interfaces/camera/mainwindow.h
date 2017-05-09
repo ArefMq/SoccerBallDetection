@@ -26,6 +26,7 @@ private slots:
 private:
     Ui::MainWindow *ui;
     QImage monitor, edgeMonitor;
+    QImage himg;
 
     MVision::Image image;
     MVision::BallDetector ballDetector;
@@ -34,6 +35,7 @@ private:
     //-- Utulity Functions
     static QImage image2qimage(const MVision::Image& img);
     bool loadImage();
+    void debugUpdate(QPainter* qpn);
 
     //-- Camera part
     pthread_t thread; bool isRunning;

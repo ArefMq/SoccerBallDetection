@@ -73,8 +73,9 @@ public:
 private:
     const Image& _inputImage; /**< Reference of the input image used for processing */
     int _greenPeak; /**< The value of Chroma (Cr) channel of the field-green color; peak of Cr histogram. Always between [0-255] */
+public: // [FIXME] : remove this line
     std::vector<int> _boundaryPoints; /**< Set of field boundary highest point for each column of the image. (Vector size = Image width) */
-
+private: // [FIXME] : remove this line
     /**
      * @brief Calculate the image histogram. Then select the Cr peak (peaks less
      * than 127) as the field-green color reference.
@@ -94,6 +95,14 @@ private:
      * @return true if the given points are clockwise.
      */
     inline double ccw(const Vector2D& p1, const Vector2D& p2, const Vector2D& p3) { return (p2.x - p1.x)*(p3.y - p1.y) - (p2.y - p1.y)*(p3.x - p1.x); }
+
+#ifdef DEBUG
+public:
+    int debug_histogram[256];
+    int debug_peak;
+    const std::vector<int>& debug_getBoundaryPoints() const { return _boundaryPoints; }
+    std::vector<Vector2D> debug_highestPoints;
+#endif
 };
 } // End namespace MVision
 #endif // COLORANALYZER_H

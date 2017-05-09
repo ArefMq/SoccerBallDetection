@@ -44,8 +44,13 @@ void ColorAnalyzer::histogramAnalysis()
             peakValue = histogram[i];
             peak = i;
         }
-
     _greenPeak = peak;
+
+#ifdef DEBUG
+    for (int i=0; i<256; ++i)
+        debug_histogram[i] = histogram[i];
+    debug_peak = peak;
+#endif
 }
 
 void ColorAnalyzer::fieldBoundaryDetection()
@@ -78,10 +83,14 @@ void ColorAnalyzer::fieldBoundaryDetection()
         }
 
         y += noise+whiteSkip;
-        if (y > 100) // [FIXME] : [FIXME] : change this with horizon
-            highestPoints.push_back(Vector2D(x, y));
+        if (y < 100) // [FIXME] : [FIXME] : change this with horizon
+            y = 100;
+        highestPoints.push_back(Vector2D(x, y));
     }
 
+#ifdef DEBUG
+    debug_highestPoints = highestPoints;
+#endif
 
     //-- Andrew's Monotone Algorithm
     int n = highestPoints.size(), k = 0;
@@ -106,10 +115,9 @@ void ColorAnalyzer::fieldBoundaryDetection()
             (i == H.size()-1 && x > H.at(i).x))
         {
             _boundaryPoints.at(x) = _inputImage.height();
-            continue;
         }
 
-        if (x == H.at(i).x)
+        else if (x == H.at(i).x)
         {
             _boundaryPoints.at(x) = H.at(i).y;
             i++;

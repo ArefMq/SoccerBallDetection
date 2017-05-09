@@ -14,6 +14,8 @@ class FRHT;
 class KinematicsProvider;
 class PatternRecognizer;
 
+#define SINGLE_BALL
+
 class BallDetector
 {
 public:
@@ -37,7 +39,12 @@ public:
 	 */
 	double averageCycleTime() const;
 
-	EdgeImage debug_GetEdgeImage(); // [FIXME] : remove this from here
+#ifdef DEBUG
+	EdgeImage debug_GetEdgeImage() const; // [FIXME] : remove this from here
+	ColorAnalyzer debug_GetColorAnalyzer() const;
+	FRHT debug_GetHoughTransform() const;
+	PatternRecognizer debug_GetPatternRecognizer() const;
+#endif
 
 private:
 	Image _image; /**< Reference to the input image */

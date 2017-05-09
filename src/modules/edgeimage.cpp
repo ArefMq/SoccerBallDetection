@@ -148,6 +148,9 @@ void EdgeImage::update()
                     (row<_scanGraphLookup.size()-1)?stepTable_Y(row+1,0):stepTable_Y(row,col)+1
             );
 
+            if (middle.x >= fieldBoundaries.size() || middle.y < fieldBoundaries.at(middle.x))
+                continue;
+
             if (bottomRight.x >= _width || bottomRight.y >= _height)
                 break;
             if (topLeft.x < 0 || topLeft.y < 0)

@@ -54,6 +54,7 @@ public:
     static inline float edgeingStep(float y) { return y*expStep+expCStep; }
 
     int originY; // [FIXME] : move this somewhere else
+    std::vector<int> fieldBoundaries; // [FIXME] : move this somewhere else
     static float expStep;
     static float expCStep;
     static float horizonOffset;

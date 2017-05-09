@@ -183,7 +183,7 @@ void FRHT::resizeCirlcle(Circle &circle, int maxBoundary, const ColorAnalyzer& c
     Vector2D p(circle._translation.x + ofx, circle._translation.y + ofy);       \
     noise = 0;                                                                  \
     itr = 0;                                                                    \
-    for (; IN_IMAGE(p) && itr < maxSearchSpace && noise < 3; itr++) {           \
+    for (; IN_IMAGE(p) && itr < maxSearchSpace && noise < 5; itr++) {           \
         if (colorAnalyzer.isGreen(p.x, p.y))                                    \
             noise++;                                                            \
         else                                                                    \

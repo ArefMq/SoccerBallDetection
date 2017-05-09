@@ -36,6 +36,8 @@
 #define CYCbCr2G(Y, Cb, Cr) CLIP( Y - (( 22544 * Cb + 46793 * Cr ) >> 16) + 135)
 #define CYCbCr2B(Y, Cb, Cr) CLIP( Y + (116129 * Cb >> 16 ) - 226 )
 
+#include "modules/coloranalyzer.h"
+
 using namespace MVision;
 using namespace std;
 
@@ -47,6 +49,8 @@ MainWindow::MainWindow(QWidget *parent) :
     isRunning(false)
 {
     ui->setupUi(this);
+    himg = QImage(200, 200, QImage::Format_RGB888);
+
     startThread();
 }
 
@@ -85,24 +89,13 @@ void* runCamera(void* p)
             }
 
         ptr->monitor = ptr->image2qimage(ptr->image);
-        QPainter* qpn = new QPainter(&ptr->monitor);
-
         ptr->ballDetector.update(ptr->image);
         ptr->edgeMonitor = ptr->image2qimage(ptr->ballDetector.debug_GetEdgeImage());
-        //    for (int i=0; i<ballDetector.edgeImage->_scanGraphLookup.size(); ++i)
-        //        for (int j=0; j<ballDetector.edgeImage->_scanGraphLookup.at(i).size(); ++j)
-        //            edgeMonitor.setPixel(ballDetector.edgeImage->_scanGraphLookup.at(i).at(j).x,
-        //                                 ballDetector.edgeImage->_scanGraphLookup.at(i).at(j).y,
-        //                                 QColor(Qt::red).rgb());
 
-        typedef std::vector<Ball> Balls;
-        const Balls& results = ptr->ballDetector.getResults();
-        for (Balls::const_iterator itr=results.begin(); itr<results.end(); itr++)
-        {
-            const Ball& b = *itr;
-            qpn->setPen(QPen(Qt::red, 3));
-            qpn->drawEllipse(QPointF(b.PositionInImage()._translation.x, b.PositionInImage()._translation.y), b.PositionInImage()._radious, b.PositionInImage()._radious);
-        }
+        QPainter* qpn = new QPainter(ptr->ui->radioButton->isChecked() ? (&ptr->monitor) : (&ptr->edgeMonitor));
+        ptr->debugUpdate(qpn);
+
+        ptr->ui->cycletime->setText(QString("Average time: ") + QString::number(ptr->ballDetector.averageCycleTime()));
 
         delete qpn;
         emit ptr->dataCame();
@@ -111,9 +104,97 @@ void* runCamera(void* p)
     return 0;
 }
 
+void MainWindow::debugUpdate(QPainter* qpn)
+{
+    //-- Draw histogram
+    {
+        float hist[256];
+        for (int i=0; i<256; ++i)
+            hist[i] = log(ballDetector.debug_GetColorAnalyzer().debug_histogram[i] + 1);
+
+        float stepMax=1;
+        static int _i=0;
+        if (_i++%10 == 0)
+        {
+            _i=0;
+            for (int i=0; i<256; ++i)
+                if (stepMax < hist[i])
+                    stepMax = hist[i];
+        }
+
+        QPainter* qpn = new QPainter(&himg);
+        qpn->setBrush(Qt::black);
+        qpn->drawRect(0, 0, 200, 200);
+
+        qpn->setBrush(Qt::green);
+        for (int i=0; i<256; ++i)
+        {
+            if (abs(ballDetector.debug_GetColorAnalyzer().debug_peak-i) < 10)
+                qpn->setPen(Qt::yellow);
+            else
+                qpn->setPen(Qt::green);
+
+            qpn->drawLine(i, 200, i, 200-(hist[i] * 190.f / stepMax));
+        }
+        qpn->setPen(Qt::green);
+        qpn->drawText(5, 20, QString("Cr : ") + QString::number(ballDetector.debug_GetColorAnalyzer().debug_peak));
+
+
+        qpn->setPen(Qt::darkYellow);
+        qpn->drawLine(100, 0, 100, 200);
+
+        delete qpn;
+    }
+
+    if (ui->chk_ca->isChecked())
+    {
+        if (ui->chk_ca_fieldColor->isChecked())
+        {
+            qpn->setPen(Qt::green);
+            for (unsigned int x=0; x<image.width(); ++x)
+                for (unsigned int y=0; y<image.height(); ++y)
+                    if (ballDetector.debug_GetColorAnalyzer().isGreen(x, y))
+                        qpn->drawPoint(x, y);
+        }
+
+        qpn->setPen(QPen(Qt::red, 3));
+        if (ui->chk_ca_runups->isChecked())
+        {
+            std::vector<Vector2D> debug_highestPoints = ballDetector.debug_GetColorAnalyzer().debug_highestPoints;
+            for (unsigned i=0; i<debug_highestPoints.size(); ++i)
+                qpn->drawPoint(debug_highestPoints.at(i).x, debug_highestPoints.at(i).y);
+        }
+
+        if (ui->chk_ca_fieldbndry->isChecked())
+        {
+            std::vector<int> fieldBoundaries = ballDetector.debug_GetColorAnalyzer().debug_getBoundaryPoints();
+            for (unsigned int i=1; i<fieldBoundaries.size(); ++i)
+                qpn->drawLine(i-1, fieldBoundaries.at(i-1), i, fieldBoundaries.at(i));
+        }
+    }
+
+    typedef std::vector<Ball> Balls;
+    const Balls& results = ballDetector.getResults();
+    for (Balls::const_iterator itr=results.begin(); itr<results.end(); itr++)
+    {
+        const Ball& b = *itr;
+        float x = b.PositionInImage()._translation.x,
+              y = b.PositionInImage()._translation.y,
+              r = b.PositionInImage()._radious;
+
+        qpn->setPen(QPen(Qt::red, 3));
+        qpn->drawEllipse(QPointF(x, y), r, r);
+        qpn->setPen(QPen(Qt::red, 6));
+        qpn->drawLine(x-r, y-r, x-r-30, y-r-30);
+        qpn->drawLine(x-r, y-r, x-r-10, y-r-15);
+        qpn->drawLine(x-r, y-r, x-r-15, y-r-10);
+    }
+
+}
+
 void MainWindow::startThread()
 {
-    connect(this, SIGNAL(dataCame()), this, SLOT(dataRecieve()), Qt::QueuedConnection);//BlockingQueuedConnection);
+    connect(this, SIGNAL(dataCame()), this, SLOT(dataRecieve()), Qt::QueuedConnection);
     pthread_create(&thread, 0, runCamera, this);
 }
 
@@ -149,6 +230,7 @@ void MainWindow::on_radioButton_clicked()
         ui->monitor->setPixmap(QPixmap::fromImage(monitor));
     else
         ui->monitor->setPixmap(QPixmap::fromImage(edgeMonitor));
+    ui->hist_monitor->setPixmap(QPixmap::fromImage(himg));
 }
 
 void MainWindow::on_radioButton_2_clicked()
