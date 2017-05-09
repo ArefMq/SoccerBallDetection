@@ -58,6 +58,8 @@ void BallDetector::update()
     _previousPoints.clear();
 
     const std::vector<Circle>& circles = houghTransform->extractedCircles();
+    std::vector<Circle> extCircles;
+    int maxScore=0; Circle bestCircle;
     for (std::vector<Circle>::const_iterator itr = circles.begin(); itr < circles.end(); itr++)
     {
         Circle circle = *itr;
@@ -75,11 +77,43 @@ void BallDetector::update()
         if (!checkBallTexture(circle))
             continue;
 
-        //-- Deliver the results
-        Ball ball(circle);
-        _results.push_back(ball);
-        _previousPoints.push_back(ball.PositionInImage()._translation);
+        //-- Merging the results
+        int scoreCount=0; Circle bestCircleCandidate = circle;
+        for (int i=0; i<extCircles.size(); ++i)
+        {
+            if (abs(extCircles.at(i)._translation.x - circle._translation.x) < 5 &&
+                abs(extCircles.at(i)._translation.y - circle._translation.y) < 5)
+            {
+                bestCircleCandidate._translation.x += extCircles.at(i)._translation.x;
+                bestCircleCandidate._translation.y += extCircles.at(i)._translation.y;
+                bestCircleCandidate._radious += extCircles.at(i)._radious;
+                scoreCount++;
+            }
+        }
+
+        if (scoreCount > maxScore)
+        {
+            //-- Apply average filter
+            bestCircleCandidate._translation.x /= scoreCount+1;
+            bestCircleCandidate._translation.y /= scoreCount+1;
+            bestCircleCandidate._radious /= scoreCount+1;
+            maxScore = scoreCount;
+            bestCircle = bestCircleCandidate;
+        }
+
+        extCircles.push_back(circle);
+
+
+//        Ball ball(circle);
+//        _results.push_back(ball);
     }
+
+    //-- Deliver the results
+    Ball ball(bestCircle);
+    _results.push_back(ball);
+    _previousPoints.push_back(ball.PositionInImage()._translation);
+
+    std::cout << "Average time : " << averageCycleTime() << "\n";
 }
 
 bool BallDetector::checkWhitePercentage(int cx, int cy, int r)

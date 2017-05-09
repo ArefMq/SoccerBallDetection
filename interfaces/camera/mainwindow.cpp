@@ -61,7 +61,7 @@ RGBImage frame;
 void* runCamera(void* p)
 {
     MainWindow* ptr = (MainWindow*)p;
-    Webcam webcam("/dev/video0", XRES, YRES);
+    Webcam webcam("/dev/video1", XRES, YRES);
     usleep(1000000);
 
     ptr->isRunning = true;
