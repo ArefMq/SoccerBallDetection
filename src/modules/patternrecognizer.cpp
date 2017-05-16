@@ -26,6 +26,8 @@ PatternRecognizer::~PatternRecognizer()
 
 void PatternRecognizer::load()
 {
+    // [FIXME] : use relative/dynamic addressing instead
+    std::cout << "Loading config files...\n";
     boostTrainer->load("/home/aref/workspace/humanoid/SoccerBallDetection/config/boostModel.xml","boost");
 }
 
@@ -54,10 +56,6 @@ Mat PatternRecognizer::getGrayROI(const Image& image, const Circle& ROI)
 
     return result;
 }
-
-#include <qstring.h>
-#include <qimage.h>
-#include <qcolor.h>
 
 #define CLIP(X) ( (X) > 255 ? 255 : (X) < 0 ? 0 : X)
 #define RGB2Y(R, G, B) CLIP(( (  66 * (R) + 129 * (G) +  25 * (B) + 128) >> 8) +  16)
@@ -102,7 +100,7 @@ bool PatternRecognizer::predict(const Image& image, const Circle& ROI, Pattern )
     vector<Point> locations;
     HOGDescriptor hog;
 
-    //-- real shit
+    //-- real process
     hog.winSize = Size(CV_WIN_SIZE, CV_WIN_SIZE);
     hog.compute(grayROIImage, sample, winStride, trainingPadding, locations);
     sample.insert(sample.begin(), 1);
