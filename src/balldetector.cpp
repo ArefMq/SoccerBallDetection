@@ -6,7 +6,16 @@
 #include "modules/patternrecognizer.h"
 
 #include <iostream>
+
+#if defined(_WIN64) || defined(_WIN32)
+#include <windows.h>
+#define STOP_WATCH_TICK SYSTEMTIME tv1, tv2; GetLocalTime(&tv1);
+#define STOP_WATCH_TOCK GetLocalTime(&tv2); double cycleTime = ((double) (tv2.wMilliseconds - tv1.wMilliseconds) / 1000.0 + (double) (tv2.wSecond - tv1.wSecond));
+#else
 #include <sys/time.h>
+#define STOP_WATCH_TICK struct timeval  tv1, tv2; gettimeofday(&tv1, NULL);
+#define STOP_WATCH_TOCK gettimeofday(&tv2, NULL); double cycleTime = ((double) (tv2.tv_usec - tv1.tv_usec) / 1000000.0 + (double) (tv2.tv_sec - tv1.tv_sec));
+#endif
 
 using namespace MVision;
 
@@ -35,19 +44,14 @@ void BallDetector::update(const Image& image)
     _image = image;
     _results.clear();
 
-    struct timeval  tv1, tv2;
-    gettimeofday(&tv1, NULL);
-
+	STOP_WATCH_TICK;
     update();
+	STOP_WATCH_TOCK;
 
-    gettimeofday(&tv2, NULL);
-
-    double cycleTime = (double) (tv2.tv_usec - tv1.tv_usec) / 1000000.0 + (double) (tv2.tv_sec - tv1.tv_sec);
     if (_averageCycleTime == -1)
         _averageCycleTime = cycleTime;
     else
         _averageCycleTime = _averageCycleTime * 0.95 + cycleTime * 0.5;
-
 }
 
 void BallDetector::update()
