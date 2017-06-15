@@ -1,13 +1,12 @@
 #include <iostream>
-#include "balldetector.h"
+#include <atlimage.h>
+#include <atltypes.h>
 
 #include "opencv/cv.h"
 #include "opencv2/highgui/highgui.hpp"
-#include "image.h"
 
-using namespace std;
-using namespace cv;
-using namespace MVision;
+#include "balldetector.h"
+#include "image.h"
 
 #define CLIP(X) ( (X) > 255 ? 255 : (X) < 0 ? 0 : X)
 
@@ -35,10 +34,44 @@ using namespace MVision;
 #define CYCbCr2G(Y, Cb, Cr) CLIP( Y - (( 22544 * Cb + 46793 * Cr ) >> 16) + 135)
 #define CYCbCr2B(Y, Cb, Cr) CLIP( Y + (116129 * Cb >> 16 ) - 226 )
 
+#define STATIC_PATH_TO_IMAGE "C:\\Users\\Orbi\\workspace\\SoccerBallDetection\\interfaces\\offline\\images\\b-short.png"
 
-Mat image2cvImage(const Image& img)
+MVision::Image loadImage(const char* filename)
 {
-	Mat result(img.width(), img.height(), DataType<unsigned char>::type);
+	using namespace MVision;
+
+	CImage cimage;
+	cimage.Load(CString(filename));
+	if (cimage.IsNull())
+		throw("can not load image");
+
+	const unsigned width = cimage.GetWidth();
+	const unsigned height = cimage.GetHeight();
+
+	Image result(height, width);
+	for (int x = 0; x < (int)width; ++x)
+		for (int y = 0; y < (int)height; ++y)
+		{
+			COLORREF c = cimage.GetPixel(x, y);
+			
+			const unsigned char r = GetRValue(c);
+			const unsigned char g = GetGValue(c);
+			const unsigned char b = GetBValue(c);
+
+			const Image::Pixel p(CRGB2Y(r, g, b), CRGB2Cb(r, g, b), CRGB2Cr(r, g, b));
+			result.getPixel(y, x) = p;
+		}
+	return result;
+}
+
+cv::Mat image2cvImage(const MVision::Image& img)
+{
+	using namespace cv;
+	using namespace MVision;
+
+	std::cout << "[sub routine image2cvimage] image size:: " << img.width() << ", " << img.height() << "\n";
+
+	Mat result(img.width(), img.height(), DataType<Vec3b>::type);
 	for (unsigned int y = 0; y<img.height(); ++y)
 		for (unsigned int x = 0; x<img.width(); ++x)
 		{
@@ -52,60 +85,40 @@ Mat image2cvImage(const Image& img)
 	return result;
 }
 
-bool loadImage(Image& result)
-{
-	Mat image;
-	image = imread("C:\\Users\\Orbi\\workspace\\SoccerBallDetection\\interfaces\\offline\\images\\a-short.png");
-
-	if (!image.data)
-	{
-		cout << "Could not open or find the image" << std::endl;
-		return false;
-	}
-
-	const unsigned width = (unsigned)image.size().width;
-	const unsigned height = (unsigned)image.size().height;
-	result.resize(width, height);
-	for (unsigned int y = 0; y<height; ++y)
-		for (unsigned int x = 0; x<width; ++x)
-		{
-			Image::Pixel p;
-			const Vec3b& c = image.at<Vec3b>(x, y);
-
-			p.y = CRGB2Y(c[0], c[1], c[2]);
-			p.cr = CRGB2Cr(c[0], c[1], c[2]);
-			p.cb = CRGB2Cb(c[0], c[1], c[2]);
-
-			result.getPixel(x, y) = p;
-		}
-
-	return true;
-}
-
-
 int main()
 {
-	BallDetector ballDetector;
+	using namespace MVision;
+	using namespace std;
 
 	Image image;
-	if (!loadImage(image))
+	try
+	{
+		image = loadImage(STATIC_PATH_TO_IMAGE);
+	}
+	catch (const char* exp)
+	{
+		cout << exp << "\n";
+		for (;;);
 		return -1;
-	Mat monitor = image2cvImage(image);
+	}
 
+	cv::Mat monitor = image2cvImage(image);
+
+	BallDetector ballDetector;
 	ballDetector.update(image);
-	
+
 	typedef vector<Ball> Balls;
 	const Balls& results = ballDetector.getResults();
 	for (Balls::const_iterator itr = results.begin(); itr<results.end(); itr++)
 	{
 		const Ball& b = *itr;
-		Point pt = Point(b.PositionInImage()._translation.x, b.PositionInImage()._translation.y);
-		circle(monitor, pt, b.PositionInImage()._radious, Scalar(0, 0, 200), 5);
+		cv::Point pt = cv::Point(b.PositionInImage()._translation.x, b.PositionInImage()._translation.y);
+		cv::circle(monitor, pt, b.PositionInImage()._radious, cv::Scalar(0, 0, 200), 2);
 	}
 
-	namedWindow("Display window", WINDOW_AUTOSIZE);
-	imshow("Display window", monitor);
+	cv::namedWindow("Monitor", cv::WINDOW_AUTOSIZE);
+	imshow("Monitor", monitor);
 
-	waitKey(0);
+	cv::waitKey(0);
 	return 0;
 }
