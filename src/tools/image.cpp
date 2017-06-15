@@ -1,5 +1,6 @@
 #include "image.h"
 #include <iostream>
+#include <string.h>
 
 using namespace MVision;
 
@@ -25,6 +26,19 @@ Image::~Image()
 #else
     if (data)
         delete[] data;
+#endif
+}
+
+Image::Image(const Image& other) :
+	_width(other._width),
+	_height(other._height),
+	_totalSize(other._totalSize)
+{
+#ifdef DEBUG
+	data = other.data;
+#else
+	data = new Pixel[_totalSize];
+	std::memcpy(data, other.data, sizeof(Pixel) * _totalSize);
 #endif
 }
 
