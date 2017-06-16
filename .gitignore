@@ -35,3 +35,8 @@
 .project
 *.swp
 *build*
+
+#VS Files
+*.sdf
+*.vcxproj
+*.opensdf
