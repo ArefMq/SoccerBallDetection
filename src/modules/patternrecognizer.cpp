@@ -9,31 +9,37 @@
 #include <iostream>
 #include <vector>
 #include <stdexcept>
+#include <stdlib.h>
 
+using namespace zmq;
 using namespace std;
 using namespace cv;
 using namespace MVision;
 
-PatternRecognizer::PatternRecognizer() :
-    boostTrainer(new CvBoost())
+#define bd_py_path "/home/aref/workspace/humanoid/BallDetection_keras/src/modules/bd.py collect &"
+
+PatternRecognizer::PatternRecognizer()
 {
+    context = new zmq::context_t(1);
+    socket = new zmq::socket_t(*context, ZMQ_REQ);
 }
 
 PatternRecognizer::~PatternRecognizer()
 {
-    delete boostTrainer;
+    delete socket;
+    delete context;
 }
 
 void PatternRecognizer::load()
 {
-    // [FIXME] : use relative/dynamic addressing instead
-    std::cout << "Loading config files...\n";
-    boostTrainer->load("/home/aref/workspace/humanoid/SoccerBallDetection/config/boostModel.xml","boost");
+//    system(bd_py_path);
+    socket->bind ("tcp://127.0.0.1:9000");
 }
 
 #define CV_WIN_SIZE 128
 #define pl std::cout << __FILE__ << "  ::  " << __LINE__ << "\n";
 
+// [TODO] : do not use opencv conversion
 Mat PatternRecognizer::getGrayROI(const Image& image, const Circle& ROI)
 {
     const int r = ROI._radious + 5;
@@ -92,25 +98,17 @@ bool PatternRecognizer::predict(const Image& image, const Circle& ROI, Pattern )
 //        }
 
     //-- constants
-    static const Size trainingPadding = Size(0, 0);
-    static const Size winStride = Size(8, 8);
+    message_t reply(128*128);
+    memcpy(reply.data(), (const char*)grayROIImage.data, 128*128);
+    socket->send(reply);
 
-    //-- variables
-    vector<float> sample;
-    vector<Point> locations;
-    HOGDescriptor hog;
+    message_t recieve;
+    socket->recv(&recieve);
 
-    //-- real process
-    hog.winSize = Size(CV_WIN_SIZE, CV_WIN_SIZE);
-    hog.compute(grayROIImage, sample, winStride, trainingPadding, locations);
-    sample.insert(sample.begin(), 1);
-
-    Mat sampleMat = Mat(sample);
-    transpose(sampleMat,sampleMat);
-
-    //-- results
-    const float r = boostTrainer->predict(sampleMat);
-    const bool result = r == 1;
+    const bool result = (recieve.size() > 0) ? (
+            ((const char*)recieve.data())[0] == '0'
+                                          ) : false;
+    cout << "is ball = "<< result << "\n";
 
 
 //    Mat grayROIImage = getGrayROI(image, ROI);

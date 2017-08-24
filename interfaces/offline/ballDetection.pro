@@ -23,9 +23,12 @@ LIBS += -lm \
         -lopencv_objdetect \
         -lopencv_contrib \
         -lopencv_legacy \
-        -lopencv_stitching
+        -lopencv_stitching \
+        -lzmq \
+        -L/usr/lib/x86_64-linux-gnu/
 
-INCLUDEPATH += ../../src/ ../../src/tools/
+INCLUDEPATH += ../../src/ ../../src/tools/ \
+                /home/aref/workspace/humanoid/zmqTest/zeromq-4.2.1/include/
 
 SOURCES += main.cpp\
         mainwindow.cpp \
@@ -52,6 +55,7 @@ HEADERS  += mainwindow.h \
     ../../src/modules/FRHT.h \
     ../../src/modules/kinematicsprovider.h \
     ../../src/modules/patternrecognizer.h \
-    ../../src/tools/vector3D.h
+    ../../src/tools/vector3D.h \
+    ../../src/tools/zmq.hpp
 
 FORMS    += mainwindow.ui

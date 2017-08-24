@@ -35,13 +35,44 @@
 using namespace std;
 using namespace MVision;
 
+#include <dirent.h>
+#include <sys/stat.h>
+
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
     ui(new Ui::MainWindow),
     ballDetector(BallDetector())
 {
     ui->setupUi(this);
-    on_pushButton_clicked();
+
+
+    DIR *dir;
+    class dirent *ent;
+    class stat st;
+
+    string directory = "/home/aref/workspace/humanoid/BallDetection_keras/interfaces/offline/images";
+    dir = opendir(directory.c_str());
+    while ((ent = readdir(dir)) != NULL)
+    {
+        const string file_name = ent->d_name;
+        const string full_file_name = directory + "/" + file_name;
+
+        if (file_name[0] == '.')
+            continue;
+
+        if (stat(full_file_name.c_str(), &st) == -1)
+            continue;
+
+        const bool is_directory = (st.st_mode & S_IFDIR) != 0;
+
+        if (is_directory)
+            continue;
+
+        cout << "processing : " << file_name.c_str() << "\n";
+        on_pushButton_clicked(QString(full_file_name.c_str()));
+    }
+    closedir(dir);
+
 }
 
 MainWindow::~MainWindow()
@@ -69,9 +100,9 @@ QImage MainWindow::image2qimage(const Image& img)
     return result;
 }
 
-void MainWindow::on_pushButton_clicked()
+void MainWindow::on_pushButton_clicked(const QString& filename)
 {
-    if (!loadImage())
+    if (!loadImage(filename))
         return;
 
     monitor = image2qimage(image);
@@ -111,10 +142,10 @@ void MainWindow::on_radioButton_2_clicked()
     on_radioButton_clicked();
 }
 
-bool MainWindow::loadImage()
+bool MainWindow::loadImage(const QString& filename)
 {
 //    QImage qimg = QImage("../images/a-short.png").scaled(500, 600, Qt::KeepAspectRatio);
-    QImage qimg = QImage("../images/b.jpg").scaled(500, 600, Qt::KeepAspectRatio);
+    QImage qimg = QImage(filename).scaled(500, 600, Qt::KeepAspectRatio);
     Image tempImage;
     image.resize(qimg.width(), qimg.height());
     tempImage.resize(qimg.width(), qimg.height());

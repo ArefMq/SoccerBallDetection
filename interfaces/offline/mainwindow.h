@@ -19,7 +19,7 @@ public:
     ~MainWindow();
 
 private slots:
-    void on_pushButton_clicked();
+    void on_pushButton_clicked(const QString& filename);
     void on_radioButton_clicked();
     void on_radioButton_2_clicked();
 
@@ -32,7 +32,7 @@ private:
 
     //-- Utulity Functions
     static QImage image2qimage(const MVision::Image& img);
-    bool loadImage();
+    bool loadImage(const QString& filename);
 };
 
 #endif // MAINWINDOW_H

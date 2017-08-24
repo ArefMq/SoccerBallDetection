@@ -78,8 +78,8 @@ void BallDetector::update()
             continue;
 
         //-- Check ball pattern
-        if (!checkBallTexture(circle))
-            continue;
+//        if (!checkBallTexture(circle))
+//            continue;
 
 #ifdef SINGLE_BALL
         //-- Merging the results
@@ -115,6 +115,8 @@ void BallDetector::update()
     Ball ball(bestCircle);
     _results.push_back(ball);
     _previousPoints.push_back(ball.PositionInImage()._translation);
+
+    checkBallTexture(bestCircle);
 #else
 
         //-- Deliver the results

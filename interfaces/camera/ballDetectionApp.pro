@@ -15,7 +15,8 @@ TARGET = ballDetection
 TEMPLATE = app
 QMAKE_CXXFLAGS += -std=c++11
 
-INCLUDEPATH += ../../src/ ../../src/tools/
+INCLUDEPATH += ../../src/ ../../src/tools/ \
+                /home/aref/workspace/humanoid/zmqTest/zeromq-4.2.1/include/
 
 LIBS += -lm \
         -lopencv_core \
@@ -28,7 +29,9 @@ LIBS += -lm \
         -lopencv_objdetect \
         -lopencv_contrib \
         -lopencv_legacy \
-        -lopencv_stitching
+        -lopencv_stitching \
+        -lzmq \
+        -L/usr/lib/x86_64-linux-gnu/
 
 SOURCES += main.cpp\
         mainwindow.cpp \

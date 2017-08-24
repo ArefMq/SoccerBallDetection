@@ -7,6 +7,7 @@
 
 #pragma once
 
+#include <zmq.hpp>
 #include "tools/image.h"
 #include "tools/circle.h"
 
@@ -29,7 +30,9 @@ public:
     bool predict(const Image& image, const Circle& ROI, Pattern pattern);
 
 private:
-    CvBoost* boostTrainer;
+    zmq::context_t* context;
+    zmq::socket_t* socket;
+
 
     cv::Mat getGrayROI(const Image& image, const Circle& ROI);
 };

@@ -7,7 +7,19 @@ detection in RoboCup humanoid and SPL leagues. Hence it provide to interfaces
 useful in these environments.
 
 ## Requirements
+* python2.7
+* libzmq (ZeroMQ)
+* libopencv (for c++)
+* build-essentials
+* make
 * qt-sdk (for offline debugger and camera app)
+
+And install these libraries via `pip` or anything else for python:
+* keras
+* tensorflow
+* zmq
+* h5py
+* opencv-python
 
 ## Installation Guide
 There are several ways to use this module:
@@ -53,6 +65,6 @@ Finally, the results will be accessible by `getResult` function.
 
 ## Contacts:
 Please let me know about any comment you might have about this project. <br/>
-Aref Moqadam Mehr (a.moqadam@mrl-spl.ir)
+Aref Moqadam Mehr (aref.moqadam@gmail.com)
 
 
