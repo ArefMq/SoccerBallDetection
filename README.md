@@ -13,6 +13,7 @@ useful in these environments.
 * build-essentials
 * make
 * qt-sdk (for offline debugger and camera app)
+* opencv
 
 And install these libraries via `pip` or anything else for python:
 * keras
@@ -23,9 +24,6 @@ And install these libraries via `pip` or anything else for python:
 
 ## Installation Guide
 There are several ways to use this module:
-
-### Install As Library
---> Compile and install .so file
 
 ### Camera Debugger App
 The camera debugger application is an Qt GUI-based application that mounts the 
@@ -51,6 +49,12 @@ make
 ```
 The offline debugger use qt sdk to show the image in <i>interfaces/offline/images/</i> 
 folder and it runs the detector module on the images.
+
+### Windows Application
+Windows application is a window-based debugger for ball detector modules.
+To run this application, open ballDetectionWindows.sln (located in <i>interfaces/ballDetectionWindows/</i>)
+via visual studio and run it. Please note the opencv has to be installed on your computer
+and should be added to you visual studio (either local or global) configes.
 
 ### B-Human Integrated Module (BH2014):
 To use the B-human interface, the code should be port into B-Human folder. To do 

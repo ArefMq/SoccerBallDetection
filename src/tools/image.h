@@ -20,6 +20,7 @@ public:
     };
 
     Image();
+	Image(const Image& other);
     Image(unsigned int width, unsigned int height);
     ~Image();
 
