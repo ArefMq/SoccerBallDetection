@@ -7,14 +7,15 @@
 
 #pragma once
 
-#include <zmq.hpp>
 #include "tools/image.h"
 #include "tools/circle.h"
+#include "ml/mmlwrapper.h"
 
-#include "opencv2/highgui/highgui.hpp"
-#include "opencv2/imgproc/imgproc.hpp"
-#include "opencv/cv.h"
-#include "opencv/ml.h"
+//#include "opencv2/highgui/highgui.hpp"
+//#include "opencv2/imgproc/imgproc.hpp"
+//#include "opencv/cv.h"
+//#include "opencv/ml.h"
+
 
 namespace MVision {
 
@@ -30,11 +31,10 @@ public:
     bool predict(const Image& image, const Circle& ROI, Pattern pattern);
 
 private:
-    zmq::context_t* context;
-    zmq::socket_t* socket;
+    void getGrayROI(const Image& image, const Circle& ROI);
+    char* grayROIImage;
 
-
-    cv::Mat getGrayROI(const Image& image, const Circle& ROI);
+    MMLWrapper* mmlw;
 };
 
 } //-- End namespace MVision

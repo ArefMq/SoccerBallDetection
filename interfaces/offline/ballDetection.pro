@@ -24,11 +24,10 @@ LIBS += -lm \
         -lopencv_contrib \
         -lopencv_legacy \
         -lopencv_stitching \
-        -lzmq \
+        -lpython2.7 \
         -L/usr/lib/x86_64-linux-gnu/
 
-INCLUDEPATH += ../../src/ ../../src/tools/ \
-                /home/aref/workspace/humanoid/zmqTest/zeromq-4.2.1/include/
+INCLUDEPATH += ../../src/ ../../src/tools/ /usr/include/python2.7/
 
 SOURCES += main.cpp\
         mainwindow.cpp \
@@ -42,7 +41,8 @@ SOURCES += main.cpp\
     ../../src/modules/FRHT.cpp \
     ../../src/modules/kinematicsprovider.cpp \
     ../../src/modules/patternrecognizer.cpp \
-    ../../src/tools/vector3D.cpp
+    ../../src/tools/vector3D.cpp \
+    ../../src/modules/ml/mmlwrapper.cpp
 
 HEADERS  += mainwindow.h \
     ../../src/tools/image.h \
@@ -56,6 +56,7 @@ HEADERS  += mainwindow.h \
     ../../src/modules/kinematicsprovider.h \
     ../../src/modules/patternrecognizer.h \
     ../../src/tools/vector3D.h \
-    ../../src/tools/zmq.hpp
+    ../../src/modules/ml/mmlwrapper.h
 
 FORMS    += mainwindow.ui
+

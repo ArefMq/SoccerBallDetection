@@ -25,11 +25,7 @@ network_protocol = "tcp"
 network_masked_ip = '127.0.0'#"192.168.14"
 
 #-- Functions
-def readImage(path, scaleSize=imageSize):
-	img = cv2.resize(cv2.imread(path, 0), scaleSize)
-	d = np.asarray(img)
-	d = d.reshape((1, scaleSize[0]*scaleSize[1]))
-	return d
+
 	
 def recieveImage(listener):
 	rc = listener.recv()
@@ -40,69 +36,31 @@ def recieveImage(listener):
 	rc = rc.astype('uint8')
 	return rc
 
-#-- Brain Class
-class Brain(object):
-	def __init__(self):
-		self.buildNetwork()
-			
-	def buildNetwork(self):
-		self.model = Sequential()
-		self.model.add(Dense(16384, input_shape=(imageSize[0] * imageSize[1],), activation='relu'))
-		self.model.add(Dropout(0.5))
-		self.model.add(Dense(128, activation='relu'))
-		self.model.add(Dropout(0.5))
-		self.model.add(Dense(64, activation='relu'))
-		self.model.add(Dropout(0.5))
-		self.model.add(Dense(1, activation='sigmoid'))
-		self.model.compile(loss='binary_crossentropy', optimizer='rmsprop', metrics=['accuracy'])
+
+
+
+
+
+
+
+
 		
-#		self.model = Sequential()
-#		self.model.add(Dense(hidden_size, input_shape=(imageSize[0] * imageSize[1],), activation='relu'))
-#		self.model.add(Dense(hidden_size, activation='relu'))
-#		self.model.add(Dense(hidden_size, activation='sigmoid'))
-#		self.model.add(Dense(1, activation='sigmoid'))
-#		self.model.compile(sgd(lr=.2), "mse")
 
-	def train(self):
-		self.model.fit(self.data, self.labels, batch_size=16, epochs=50)
 
-	def predict(self):
-		self.labels = self.model.predict(self.data, batch_size=1)
-		return self.labels
-		
-	def loadData(self):
-		#-- Scaning dataset directory
-		dataset_pos = dataset_root_dir + "_pos"
-		dataset_neg = dataset_root_dir + "_neg"
-		onlyfiles_pos = [f for f in listdir(dataset_pos) if isfile(join(dataset_pos, f))]
-		onlyfiles_neg = [f for f in listdir(dataset_neg) if isfile(join(dataset_neg, f))]
 
-		#-- Initializing data
-		datasetSize = len(onlyfiles_pos) + len(onlyfiles_neg)
-		self.data = np.zeros((datasetSize, imageSize[0] * imageSize[1]))
-		self.labels = np.zeros((datasetSize, 1))
 
-		#-- Loading files
-		for i in range(0, len(onlyfiles_pos)):
-			f = dataset_pos + "/" + onlyfiles_pos[i]
-			print "reading : ", f
-			self.data[i] = readImage(f, imageSize)
-			self.labels[i] = 1
-		offset = len(onlyfiles_pos)
 
-		for i in range(0, len(onlyfiles_neg)):
-			f = dataset_neg + "/" + onlyfiles_neg[i]
-			print "reading : ", f
-			self.data[i+offset] = readImage(f, imageSize)
-			self.labels[i+offset] = 0
 
-	def load(self, filename):
-		self.model.load_weights(filename + ".h5")
-		
-	def save(self, filename):
-		self.model.save_weights(filename + ".h5", overwrite=True)
-		with open(filename + ".json", "w") as outfile:
-			json.dump(self.model.to_json(), outfile)
+
+
+
+
+
+
+
+
+
+
 
 #-- Main Function
 if __name__ == "__main__":

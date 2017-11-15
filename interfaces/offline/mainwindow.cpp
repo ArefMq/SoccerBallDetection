@@ -50,7 +50,7 @@ MainWindow::MainWindow(QWidget *parent) :
     class dirent *ent;
     class stat st;
 
-    string directory = "/home/aref/workspace/humanoid/BallDetection_keras/interfaces/offline/images";
+    string directory = "/home/cafebazaar/Workspace/newmanoid/SoccerBallDetection/interfaces/offline/images";
     dir = opendir(directory.c_str());
     while ((ent = readdir(dir)) != NULL)
     {
@@ -70,6 +70,8 @@ MainWindow::MainWindow(QWidget *parent) :
 
         cout << "processing : " << file_name.c_str() << "\n";
         on_pushButton_clicked(QString(full_file_name.c_str()));
+
+//        break;
     }
     closedir(dir);
 
