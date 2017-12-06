@@ -40,3 +40,7 @@
 *.sdf
 *.vcxproj
 *.opensdf
+
+#Python files
+*.pyc
+*.idea*
