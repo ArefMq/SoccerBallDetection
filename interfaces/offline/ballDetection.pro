@@ -56,7 +56,8 @@ HEADERS  += mainwindow.h \
     ../../src/modules/kinematicsprovider.h \
     ../../src/modules/patternrecognizer.h \
     ../../src/tools/vector3D.h \
-    ../../src/modules/ml/mmlwrapper.h
+    ../../src/modules/ml/mmlwrapper.h \
+    util.h
 
 FORMS    += mainwindow.ui
 

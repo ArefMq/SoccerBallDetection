@@ -27,10 +27,13 @@
      <enum>QFrame::Box</enum>
     </property>
     <property name="text">
-     <string/>
+     <string>-- [ Selecet Stream Source ] --</string>
+    </property>
+    <property name="alignment">
+     <set>Qt::AlignCenter</set>
     </property>
    </widget>
-   <widget class="QRadioButton" name="radioButton">
+   <widget class="QRadioButton" name="radio_image">
     <property name="geometry">
      <rect>
       <x>10</x>
@@ -46,7 +49,7 @@
      <bool>true</bool>
     </property>
    </widget>
-   <widget class="QRadioButton" name="radioButton_2">
+   <widget class="QRadioButton" name="radio_edge">
     <property name="geometry">
      <rect>
       <x>100</x>
@@ -59,7 +62,10 @@
      <string>Edge</string>
     </property>
    </widget>
-   <widget class="QPushButton" name="pushButton">
+   <widget class="QPushButton" name="btn_referesh">
+    <property name="enabled">
+     <bool>false</bool>
+    </property>
     <property name="geometry">
      <rect>
       <x>410</x>
@@ -70,6 +76,22 @@
     </property>
     <property name="text">
      <string>refresh</string>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="btn_next">
+    <property name="enabled">
+     <bool>false</bool>
+    </property>
+    <property name="geometry">
+     <rect>
+      <x>310</x>
+      <y>610</y>
+      <width>99</width>
+      <height>27</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>next</string>
     </property>
    </widget>
   </widget>

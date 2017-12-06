@@ -19,20 +19,26 @@ public:
     ~MainWindow();
 
 private slots:
-    void on_pushButton_clicked(const QString& filename);
-    void on_radioButton_clicked();
-    void on_radioButton_2_clicked();
+    void on_btn_referesh_clicked();
+    void on_btn_next_clicked();
+    void on_radio_image_clicked();
+    void on_radio_edge_clicked();
 
 private:
     Ui::MainWindow *ui;
     QImage monitor, edgeMonitor;
 
-    MVision::Image image;
     MVision::BallDetector ballDetector;
 
-    //-- Utulity Functions
-    static QImage image2qimage(const MVision::Image& img);
-    bool loadImage(const QString& filename);
+    bool isEdgeImageSelected() const;
+    void setImageToMonitor();
+
+    void runBallDetector(const MVision::Image &image);
+    void runWithAFileName(const QString& filename);
+
+    // [TODO] : here might need a refactor as well
+    void scanDatasetDirectory(const QString& dir_path);
+    std::vector<QString> dataset;
 };
 
 #endif // MAINWINDOW_H
