@@ -4,7 +4,7 @@
 #include <qimage.h> // TODO : change this one
 #include <qobject.h>
 
-class StreamLoader : QObject
+class StreamLoader : public QObject
 {
 public:
     Q_OBJECT

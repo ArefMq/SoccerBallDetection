@@ -10,10 +10,11 @@
 #include "tools/image.h"
 #include "tools/circle.h"
 
+#include "../debughelperinterface.h"
 
 namespace MVision {
 
-class PatternRecognizer
+class PatternRecognizer : public Debugable
 {
 public:
     PatternRecognizer();

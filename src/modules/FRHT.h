@@ -10,10 +10,11 @@
 #include "edgeimage.h"
 #include "circle.h"
 #include "coloranalyzer.h"
+#include "../debughelperinterface.h"
 
 namespace MVision {
 
-class FRHT
+class FRHT : public Debugable
 {
 public:
     /**

@@ -10,6 +10,7 @@
 #include <vector>
 #include "image.h"
 #include "vector2D.h"
+#include "../debughelperinterface.h"
 
 // [FIXME] : make these parameters
 #define expStep__  0.1
@@ -18,7 +19,7 @@
 
 namespace MVision {
 
-class EdgeImage : public Image
+class EdgeImage : public Image, public Debugable
 {
 public:
     /**

@@ -11,12 +11,13 @@
 #define COLORANALYZER_H
 
 #include "image.h"
+#include "../debughelperinterface.h"
 #include <vector>
 #include <vector2D.h>
 
 namespace MVision {
 
-class ColorAnalyzer
+class ColorAnalyzer : public Debugable
 {
 public:
     /**

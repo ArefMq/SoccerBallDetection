@@ -3,6 +3,7 @@
 
 #include "tools/image.h"
 #include "tools/ball.h"
+#include "debughelperinterface.h"
 
 #include <vector>
 
@@ -16,11 +17,13 @@ class PatternRecognizer;
 
 #define SINGLE_BALL
 
-class BallDetector
+class BallDetector : public Debugable
 {
 public:
-	BallDetector();
+    BallDetector(DebugHelperInterface* debugHelper=0);
 	~BallDetector();
+
+    void test() { print("this is a test message!"); }
 
 	/**
 	 * @brief main process function; run the ball detection module on given image.
@@ -39,18 +42,11 @@ public:
 	 */
 	double averageCycleTime() const;
 
-#ifdef DEBUG
-	EdgeImage debug_GetEdgeImage() const; // [FIXME] : remove this from here
-	ColorAnalyzer debug_GetColorAnalyzer() const;
-	FRHT debug_GetHoughTransform() const;
-	PatternRecognizer debug_GetPatternRecognizer() const;
-#endif
-
 private:
 	Image _image; /**< Reference to the input image */
 	std::vector<Ball> _results; /**< Set of extracted ball in the image */
 	std::vector<Vector2D> _previousPoints; /**< Points marked as prospective ball in previous cycle */
-	double _averageCycleTime; /**< Average cycle time */
+    double _averageCycleTime;
 
 	//-- Main Modules
 	ColorAnalyzer*      colorAnalyzer;

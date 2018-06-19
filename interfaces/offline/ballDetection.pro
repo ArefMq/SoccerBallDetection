@@ -12,20 +12,21 @@ greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 TARGET = ballDetection
 TEMPLATE = app
 
-LIBS += -lm \
-        -lopencv_core \
-        -lopencv_imgproc \
-        -lopencv_highgui \
-        -lopencv_ml \
-        -lopencv_video \
-        -lopencv_features2d \
-        -lopencv_calib3d \
-        -lopencv_objdetect \
-        -lopencv_contrib \
-        -lopencv_legacy \
-        -lopencv_stitching \
-        -lpython2.7 \
-        -L/usr/lib/x86_64-linux-gnu/
+LIBS += -L/usr/lib/x86_64-linux-gnu/
+#        -lm \
+#        -lopencv_core \
+#        -lopencv_imgproc \
+#        -lopencv_highgui \
+#        -lopencv_ml \
+#        -lopencv_video \
+#        -lopencv_features2d \
+#        -lopencv_calib3d \
+#        -lopencv_objdetect \
+#        -lopencv_contrib \
+#        -lopencv_legacy \
+#        -lopencv_stitching \
+#        -lpython2.7 \
+
 
 INCLUDEPATH += ../../src/ ../../src/tools/ /usr/include/python2.7/
 
@@ -42,8 +43,10 @@ SOURCES += main.cpp\
     ../../src/modules/kinematicsprovider.cpp \
     ../../src/modules/patternrecognizer.cpp \
     ../../src/tools/vector3D.cpp \
-    streamloader.cpp \
-    singleimageloader.cpp
+    streams/streamloader.cpp \
+    streams/singleimageloader.cpp \
+    ../../src/debughelperinterface.cpp \
+    debugger.cpp
 
 HEADERS  += mainwindow.h \
     ../../src/tools/image.h \
@@ -58,8 +61,10 @@ HEADERS  += mainwindow.h \
     ../../src/modules/patternrecognizer.h \
     ../../src/tools/vector3D.h \
     util.h \
-    streamloader.h \
-    singleimageloader.h
+    streams/streamloader.h \
+    streams/singleimageloader.h \
+    ../../src/debughelperinterface.h \
+    debugger.h
 
 FORMS    += mainwindow.ui
 

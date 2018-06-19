@@ -5,8 +5,9 @@
 
 #include "image.h"
 #include "balldetector.h"
-#include "streamloader.h"
-#include "singleimageloader.h"
+#include "streams/singleimageloader.h"
+#include "streams/singleimageloader.h"
+#include "debugger.h"
 
 namespace Ui {
 class MainWindow;
@@ -34,7 +35,8 @@ private slots:
 private:
     Ui::MainWindow *ui;
     MVision::BallDetector ballDetector;
-    SingleImageLoader* streamLoader;
+    StreamLoader* streamLoader;
+    Debugger debugger;
 };
 
 #endif // MAINWINDOW_H

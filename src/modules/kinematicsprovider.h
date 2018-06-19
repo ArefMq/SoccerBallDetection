@@ -1,8 +1,10 @@
 #ifndef KINEMATICSPROVIDER_H
 #define KINEMATICSPROVIDER_H
 
+#include "../debughelperinterface.h"
+
 namespace MVision {
-class KinematicsProvider
+class KinematicsProvider : public Debugable
 {
 public:
     KinematicsProvider();

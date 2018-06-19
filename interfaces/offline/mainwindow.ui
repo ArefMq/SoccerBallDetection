@@ -29,12 +29,15 @@
     <property name="text">
      <string/>
     </property>
+    <property name="scaledContents">
+     <bool>false</bool>
+    </property>
    </widget>
    <widget class="QCheckBox" name="chk_edg_full">
     <property name="geometry">
      <rect>
       <x>670</x>
-      <y>350</y>
+      <y>370</y>
       <width>171</width>
       <height>22</height>
      </rect>
@@ -46,37 +49,21 @@
    <widget class="QLabel" name="cycletime">
     <property name="geometry">
      <rect>
-      <x>476</x>
+      <x>480</x>
       <y>490</y>
       <width>171</width>
-      <height>20</height>
+      <height>30</height>
      </rect>
     </property>
     <property name="text">
      <string>Average time : </string>
     </property>
    </widget>
-   <widget class="QRadioButton" name="rd_image">
-    <property name="geometry">
-     <rect>
-      <x>10</x>
-      <y>490</y>
-      <width>81</width>
-      <height>22</height>
-     </rect>
-    </property>
-    <property name="text">
-     <string>Image</string>
-    </property>
-    <property name="checked">
-     <bool>true</bool>
-    </property>
-   </widget>
    <widget class="QCheckBox" name="chk_edg_pnts">
     <property name="geometry">
      <rect>
       <x>670</x>
-      <y>330</y>
+      <y>350</y>
       <width>171</width>
       <height>22</height>
      </rect>
@@ -89,7 +76,7 @@
     <property name="geometry">
      <rect>
       <x>660</x>
-      <y>380</y>
+      <y>400</y>
       <width>171</width>
       <height>22</height>
      </rect>
@@ -102,7 +89,7 @@
     <property name="geometry">
      <rect>
       <x>670</x>
-      <y>240</y>
+      <y>260</y>
       <width>171</width>
       <height>22</height>
      </rect>
@@ -127,24 +114,11 @@
      <string/>
     </property>
    </widget>
-   <widget class="QRadioButton" name="rd_edge">
-    <property name="geometry">
-     <rect>
-      <x>100</x>
-      <y>490</y>
-      <width>71</width>
-      <height>22</height>
-     </rect>
-    </property>
-    <property name="text">
-     <string>Edge</string>
-    </property>
-   </widget>
    <widget class="QCheckBox" name="chk_ca">
     <property name="geometry">
      <rect>
       <x>660</x>
-      <y>220</y>
+      <y>240</y>
       <width>171</width>
       <height>22</height>
      </rect>
@@ -157,7 +131,7 @@
     <property name="geometry">
      <rect>
       <x>670</x>
-      <y>260</y>
+      <y>280</y>
       <width>171</width>
       <height>22</height>
      </rect>
@@ -170,7 +144,7 @@
     <property name="geometry">
      <rect>
       <x>670</x>
-      <y>280</y>
+      <y>300</y>
       <width>171</width>
       <height>22</height>
      </rect>
@@ -183,7 +157,7 @@
     <property name="geometry">
      <rect>
       <x>660</x>
-      <y>310</y>
+      <y>330</y>
       <width>171</width>
       <height>22</height>
      </rect>
@@ -196,7 +170,7 @@
     <property name="geometry">
      <rect>
       <x>660</x>
-      <y>410</y>
+      <y>430</y>
       <width>161</width>
       <height>27</height>
      </rect>
@@ -229,7 +203,7 @@
     <property name="geometry">
      <rect>
       <x>660</x>
-      <y>440</y>
+      <y>460</y>
       <width>121</width>
       <height>27</height>
      </rect>
@@ -242,7 +216,7 @@
     <property name="geometry">
      <rect>
       <x>660</x>
-      <y>470</y>
+      <y>490</y>
       <width>41</width>
       <height>27</height>
      </rect>
@@ -255,7 +229,7 @@
     <property name="geometry">
      <rect>
       <x>700</x>
-      <y>470</y>
+      <y>490</y>
       <width>41</width>
       <height>27</height>
      </rect>
@@ -268,7 +242,7 @@
     <property name="geometry">
      <rect>
       <x>740</x>
-      <y>470</y>
+      <y>490</y>
       <width>41</width>
       <height>27</height>
      </rect>
@@ -281,7 +255,7 @@
     <property name="geometry">
      <rect>
       <x>780</x>
-      <y>470</y>
+      <y>490</y>
       <width>41</width>
       <height>27</height>
      </rect>
@@ -294,13 +268,26 @@
     <property name="geometry">
      <rect>
       <x>780</x>
-      <y>440</y>
+      <y>460</y>
       <width>41</width>
       <height>27</height>
      </rect>
     </property>
     <property name="text">
      <string>R</string>
+    </property>
+   </widget>
+   <widget class="QCheckBox" name="chk_ri">
+    <property name="geometry">
+     <rect>
+      <x>660</x>
+      <y>220</y>
+      <width>171</width>
+      <height>22</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Raw Image</string>
     </property>
    </widget>
   </widget>

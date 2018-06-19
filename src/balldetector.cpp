@@ -20,7 +20,7 @@
 
 using namespace MVision;
 
-BallDetector::BallDetector() :
+BallDetector::BallDetector(DebugHelperInterface *debugHelper) :
     _averageCycleTime(-1),
     colorAnalyzer(new ColorAnalyzer(_image)),
     edgeImage(new EdgeImage(_image)),
@@ -29,6 +29,7 @@ BallDetector::BallDetector() :
     patternRecognizer(new PatternRecognizer())
 {
     patternRecognizer->load();
+    setDebugHelper(debugHelper);
 }
 
 BallDetector::~BallDetector()
@@ -188,10 +189,3 @@ bool BallDetector::checkBallTexture(const Circle& ball)
 {
     return patternRecognizer->predict(_image, ball);
 }
-
-#ifdef DEBUG
-EdgeImage BallDetector::debug_GetEdgeImage() const { return *edgeImage; } // [FIXME] : remove this from here
-ColorAnalyzer BallDetector::debug_GetColorAnalyzer() const { return *colorAnalyzer; }
-FRHT BallDetector::debug_GetHoughTransform() const { return *houghTransform; }
-PatternRecognizer BallDetector::debug_GetPatternRecognizer() const { return *patternRecognizer; }
-#endif
