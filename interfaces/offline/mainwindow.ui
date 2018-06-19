@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>519</width>
-    <height>644</height>
+    <width>871</width>
+    <height>520</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -19,25 +19,48 @@
      <rect>
       <x>10</x>
       <y>10</y>
-      <width>500</width>
-      <height>600</height>
+      <width>640</width>
+      <height>480</height>
      </rect>
     </property>
     <property name="frameShape">
      <enum>QFrame::Box</enum>
     </property>
     <property name="text">
-     <string>-- [ Selecet Stream Source ] --</string>
-    </property>
-    <property name="alignment">
-     <set>Qt::AlignCenter</set>
+     <string/>
     </property>
    </widget>
-   <widget class="QRadioButton" name="radio_image">
+   <widget class="QCheckBox" name="chk_edg_full">
+    <property name="geometry">
+     <rect>
+      <x>670</x>
+      <y>350</y>
+      <width>171</width>
+      <height>22</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Full Edges</string>
+    </property>
+   </widget>
+   <widget class="QLabel" name="cycletime">
+    <property name="geometry">
+     <rect>
+      <x>476</x>
+      <y>490</y>
+      <width>171</width>
+      <height>20</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Average time : </string>
+    </property>
+   </widget>
+   <widget class="QRadioButton" name="rd_image">
     <property name="geometry">
      <rect>
       <x>10</x>
-      <y>610</y>
+      <y>490</y>
       <width>81</width>
       <height>22</height>
      </rect>
@@ -49,11 +72,66 @@
      <bool>true</bool>
     </property>
    </widget>
-   <widget class="QRadioButton" name="radio_edge">
+   <widget class="QCheckBox" name="chk_edg_pnts">
+    <property name="geometry">
+     <rect>
+      <x>670</x>
+      <y>330</y>
+      <width>171</width>
+      <height>22</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Points</string>
+    </property>
+   </widget>
+   <widget class="QCheckBox" name="chk_frht">
+    <property name="geometry">
+     <rect>
+      <x>660</x>
+      <y>380</y>
+      <width>171</width>
+      <height>22</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>FRHT</string>
+    </property>
+   </widget>
+   <widget class="QCheckBox" name="chk_ca_fieldColor">
+    <property name="geometry">
+     <rect>
+      <x>670</x>
+      <y>240</y>
+      <width>171</width>
+      <height>22</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Field Color</string>
+    </property>
+   </widget>
+   <widget class="QLabel" name="hist_monitor">
+    <property name="geometry">
+     <rect>
+      <x>660</x>
+      <y>10</y>
+      <width>200</width>
+      <height>200</height>
+     </rect>
+    </property>
+    <property name="frameShape">
+     <enum>QFrame::Box</enum>
+    </property>
+    <property name="text">
+     <string/>
+    </property>
+   </widget>
+   <widget class="QRadioButton" name="rd_edge">
     <property name="geometry">
      <rect>
       <x>100</x>
-      <y>610</y>
+      <y>490</y>
       <width>71</width>
       <height>22</height>
      </rect>
@@ -62,36 +140,167 @@
      <string>Edge</string>
     </property>
    </widget>
-   <widget class="QPushButton" name="btn_referesh">
-    <property name="enabled">
-     <bool>false</bool>
-    </property>
+   <widget class="QCheckBox" name="chk_ca">
     <property name="geometry">
      <rect>
-      <x>410</x>
-      <y>610</y>
-      <width>99</width>
-      <height>27</height>
+      <x>660</x>
+      <y>220</y>
+      <width>171</width>
+      <height>22</height>
      </rect>
     </property>
     <property name="text">
-     <string>refresh</string>
+     <string>Color Analyze</string>
     </property>
    </widget>
-   <widget class="QPushButton" name="btn_next">
-    <property name="enabled">
-     <bool>false</bool>
-    </property>
+   <widget class="QCheckBox" name="chk_ca_runups">
     <property name="geometry">
      <rect>
-      <x>310</x>
-      <y>610</y>
-      <width>99</width>
+      <x>670</x>
+      <y>260</y>
+      <width>171</width>
+      <height>22</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Run-ups</string>
+    </property>
+   </widget>
+   <widget class="QCheckBox" name="chk_ca_fieldbndry">
+    <property name="geometry">
+     <rect>
+      <x>670</x>
+      <y>280</y>
+      <width>171</width>
+      <height>22</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Field Boundary</string>
+    </property>
+   </widget>
+   <widget class="QCheckBox" name="chk_edg">
+    <property name="geometry">
+     <rect>
+      <x>660</x>
+      <y>310</y>
+      <width>171</width>
+      <height>22</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Edge Detection</string>
+    </property>
+   </widget>
+   <widget class="QComboBox" name="stream_selector">
+    <property name="geometry">
+     <rect>
+      <x>660</x>
+      <y>410</y>
+      <width>161</width>
+      <height>27</height>
+     </rect>
+    </property>
+    <property name="currentText">
+     <string>Single Image</string>
+    </property>
+    <item>
+     <property name="text">
+      <string>Single Image</string>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>Image Directory</string>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>Camera Device</string>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>Video Stream</string>
+     </property>
+    </item>
+   </widget>
+   <widget class="QPushButton" name="btn_open">
+    <property name="geometry">
+     <rect>
+      <x>660</x>
+      <y>440</y>
+      <width>121</width>
       <height>27</height>
      </rect>
     </property>
     <property name="text">
-     <string>next</string>
+     <string>Open</string>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="btn_previous">
+    <property name="geometry">
+     <rect>
+      <x>660</x>
+      <y>470</y>
+      <width>41</width>
+      <height>27</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>&lt;&lt;</string>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="btn_pause">
+    <property name="geometry">
+     <rect>
+      <x>700</x>
+      <y>470</y>
+      <width>41</width>
+      <height>27</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>||</string>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="btn_play">
+    <property name="geometry">
+     <rect>
+      <x>740</x>
+      <y>470</y>
+      <width>41</width>
+      <height>27</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>&gt;</string>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="btn_forward">
+    <property name="geometry">
+     <rect>
+      <x>780</x>
+      <y>470</y>
+      <width>41</width>
+      <height>27</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>&gt;&gt;</string>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="btn_reload">
+    <property name="geometry">
+     <rect>
+      <x>780</x>
+      <y>440</y>
+      <width>41</width>
+      <height>27</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>R</string>
     </property>
    </widget>
   </widget>

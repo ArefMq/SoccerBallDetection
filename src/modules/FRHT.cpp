@@ -59,7 +59,7 @@ void FRHT::update(std::vector<Vector2D> preferredRandomPoints)
     for (unsigned int i=0; i<randomPoints.size(); ++i)
     {
         Vector2D& point = randomPoints.at(i);
-        int step = EdgeImage::edgeingStep(point.y-_image.originY) / 2;
+        int step = EdgeImage::edgeingStep(point.y()-_image.originY) / 2;
 
         edgePointsLastIndex = _image.edgePoints().size();
         _image.refine(point);
@@ -69,7 +69,7 @@ void FRHT::update(std::vector<Vector2D> preferredRandomPoints)
         {
             const int randomID = (rand() % additionalPoints) + edgePointsLastIndex;
             point = _image.edgePoints().at(randomID);
-            step = EdgeImage::edgeingStep(point.y-_image.originY) / 2;
+            step = EdgeImage::edgeingStep(point.y()-_image.originY) / 2;
             _image.refine(point);
         }
 
@@ -82,8 +82,8 @@ void FRHT::findCircle(const Vector2D& centerPoint, int step)
     std::vector<SearchCell> searchPoints;
 
     // [FIXME] : there is a bug here, sometimes one point is pushed in some place with no edge in.
-    for (int y=centerPoint.y-step; y<centerPoint.y+step; ++y)
-        for (int x=centerPoint.x-step; x<centerPoint.x+step; ++x)
+    for (int y=centerPoint.y()-step; y<centerPoint.y()+step; ++y)
+        for (int x=centerPoint.x()-step; x<centerPoint.x()+step; ++x)
         {
             if (x < 0 || y < 0 || x >= (int)_image.width() || y >= (int)_image.height())
                 continue;
@@ -92,7 +92,7 @@ void FRHT::findCircle(const Vector2D& centerPoint, int step)
                 continue;
 
             // [TODO] : make this one lookup table in order to speed up
-            const int distance = sqrt((x-centerPoint.x)*(x-centerPoint.x) + (y-centerPoint.y)*(y-centerPoint.y));
+            const int distance = sqrt((x-centerPoint.x())*(x-centerPoint.x()) + (y-centerPoint.y())*(y-centerPoint.y()));
 
             for (std::vector<SearchCell>::const_iterator sp = searchPoints.begin(); sp < searchPoints.end(); sp++)
                 if (sp->distance == distance)
@@ -109,18 +109,18 @@ void FRHT::findCircle(const Vector2D& centerPoint, int step)
 void FRHT::checkCircle(const Vector2D& p1, const Vector2D& p2, const Vector2D& p3)
 {
     Circle circle = fitACircle(p1, p2, p3);
-    if (std::isnan(circle._translation.x))
+    if (std::isnan(circle.translation().x()))
         return;
-    if (std::isnan(circle._translation.y))
+    if (std::isnan(circle.translation().y()))
         return;
-    if (std::isnan(circle._radious))
+    if (std::isnan(circle.radious()))
         return;
 
-    if (std::isinf(circle._translation.x))
+    if (std::isinf(circle.translation().x()))
         return;
-    if (std::isinf(circle._translation.y))
+    if (std::isinf(circle.translation().y()))
         return;
-    if (std::isinf(circle._radious))
+    if (std::isinf(circle.radious()))
         return;
 
     _circles.push_back(circle);
@@ -133,9 +133,9 @@ const std::vector<Circle>& FRHT::extractedCircles() const
 
 Circle FRHT::fitACircle(const Vector2D& p1, const Vector2D& p2, const Vector2D& p3)
 {
-    const Vector3D P1 = Vector3D(p1.x, p1.y, 0);
-    const Vector3D P2 = Vector3D(p2.x, p2.y, 0);
-    const Vector3D P3 = Vector3D(p3.x, p3.y, 0);
+    const Vector3D P1 = Vector3D(p1.x(), p1.y(), 0);
+    const Vector3D P2 = Vector3D(p2.x(), p2.y(), 0);
+    const Vector3D P3 = Vector3D(p3.x(), p3.y(), 0);
 
     const Vector3D t = P2-P1; // u
     const Vector3D u = P3-P1; // v
@@ -143,21 +143,21 @@ Circle FRHT::fitACircle(const Vector2D& p1, const Vector2D& p2, const Vector2D& 
 
     //-- Cross Product of : t x u
     const Vector3D w = Vector3D(
-            t.y*u.z - t.z*u.y,
-            t.z*u.x - t.x*u.z,
-            t.x*u.y - t.y*u.x
+            t.y()*u.z() - t.z()*u.y(),
+            t.z()*u.x() - t.x()*u.z(),
+            t.x()*u.y() - t.y()*u.x()
     );
 
-    const float t2 = t.x*t.x + t.y*t.y + t.z*t.z;
-    const float u2 = u.x*u.x + u.y*u.y + u.z*u.z;
-    const float w2 = w.x*w.x + w.y*w.y + w.z*w.z;
+    const float t2 = t.x()*t.x() + t.y()*t.y() + t.z()*t.z();
+    const float u2 = u.x()*u.x() + u.y()*u.y() + u.z()*u.z();
+    const float w2 = w.x()*w.x() + w.y()*w.y() + w.z()*w.z();
 
-    const Vector3D mid = u * (t2 * (u.x*v.x + u.y*v.y + u.z*v.z)) -
-            t * (u2 * (t.x*v.x + t.y*v.y + t.z*v.z));
+    const Vector3D mid = u * (t2 * (u.x()*v.x() + u.y()*v.y() + u.z()*v.z())) -
+            t * (u2 * (t.x()*v.x() + t.y()*v.y() + t.z()*v.z()));
 
-    const float cx = P1.x + (mid / (2*w2)).x;
-    const float cy = P1.y + (mid / (2*w2)).y;
-    const float r = 0.5f * sqrt( t2 * u2 * (v.x*v.x + v.y*v.y + v.z*v.z) / w2 );
+    const float cx = P1.x() + (mid / (2*w2)).x();
+    const float cy = P1.y() + (mid / (2*w2)).y();
+    const float r = 0.5f * sqrt( t2 * u2 * (v.x()*v.x() + v.y()*v.y() + v.z()*v.z()) / w2 );
 
     return Circle(Vector2D(cx, cy), r);
 }
@@ -170,21 +170,21 @@ void FRHT::resizeCirlcle(Circle &circle, int maxBoundary, const ColorAnalyzer& c
     std::vector<Vector2D> searchPoints;
 
 //-- Some dirty hacks to avoid complex functions, I know it's still pretty complex...
-#define IN_IMAGE(p) (p.x >= 0 && p.x < _image.width() && p.y >= 0 && p.y < _image.height() && p.y > maxBoundary)
+#define IN_IMAGE(p) (p.x() >= 0 && p.x() < _image.width() && p.y() >= 0 && p.y() < _image.height() && p.y() > maxBoundary)
 
 #ifdef USE_EDGE_TO_REFINE
-#define AFTER_SEARCH(invf) while (edgeImage[p.y][p.x].y < 64) p.y++; [FIXME]
+#define AFTER_SEARCH(invf) while (edgeImage[p.y()][p.x()].y() < 64) p.y()++; [FIXME]
 #else
 #define AFTER_SEARCH(invf) invf;
 #endif
 
 #define SEARCH(ofx, ofy, cfunc, invf)                                           \
     if (searchPoints.size() < 3) {                                              \
-    Vector2D p(circle._translation.x + ofx, circle._translation.y + ofy);       \
+    Vector2D p(circle.translation().x() + ofx, circle.translation().y() + ofy);       \
     noise = 0;                                                                  \
     itr = 0;                                                                    \
     for (; IN_IMAGE(p) && itr < maxSearchSpace && noise < 5; itr++) {           \
-        if (colorAnalyzer.isGreen(p.x, p.y))                                    \
+        if (colorAnalyzer.isGreen(p.x(), p.y()))                                    \
             noise++;                                                            \
         else                                                                    \
             noise=0;                                                            \
@@ -195,17 +195,17 @@ void FRHT::resizeCirlcle(Circle &circle, int maxBoundary, const ColorAnalyzer& c
         searchPoints.push_back(p); }
 //-- End of dirty hack ---------------------------------------------------------------
 
-    const float r = circle._radious;
-    SEARCH(0, -r, p.y--, p.y += noise); //-- Search up
-    SEARCH(+r, 0, p.x++, p.x -= noise); //-- Search right
-    SEARCH(-r, 0, p.x--, p.x += noise); //-- Search left
+    const float r = circle.radious();
+    SEARCH(0, -r, p.mutable_y()--, p.mutable_y() += noise); //-- Search up
+    SEARCH(+r, 0, p.mutable_x()++, p.mutable_x() -= noise); //-- Search right
+    SEARCH(-r, 0, p.mutable_x()--, p.mutable_x() += noise); //-- Search left
 
-    SEARCH(+r, 0, {p.y--; p.x++;}, {p.y += noise; p.x -= noise;}); //-- Search up-right
-    SEARCH(+r, 0, {p.y--; p.x--;}, {p.y += noise; p.x += noise;}); //-- Search up-left
-    SEARCH(+r, 0, {p.y++; p.x++;}, {p.y -= noise; p.x -= noise;}); //-- Search bottom-right
-    SEARCH(+r, 0, {p.y++; p.x--;}, {p.y -= noise; p.x += noise;}); //-- Search bottom-left
+    SEARCH(+r, 0, {p.mutable_y()--; p.mutable_x()++;}, {p.mutable_y() += noise; p.mutable_x() -= noise;}); //-- Search up-right
+    SEARCH(+r, 0, {p.mutable_y()--; p.mutable_x()--;}, {p.mutable_y() += noise; p.mutable_x() += noise;}); //-- Search up-left
+    SEARCH(+r, 0, {p.mutable_y()++; p.mutable_x()++;}, {p.mutable_y() -= noise; p.mutable_x() -= noise;}); //-- Search bottom-right
+    SEARCH(+r, 0, {p.mutable_y()++; p.mutable_x()--;}, {p.mutable_y() -= noise; p.mutable_x() += noise;}); //-- Search bottom-left
 
-    SEARCH(+r, 0, p.y++, p.y -= noise); //-- Search bottom
+    SEARCH(+r, 0, p.mutable_y()++, p.mutable_y() -= noise); //-- Search bottom
 
 
     if (searchPoints.size() > 2)

@@ -6,112 +6,82 @@
 namespace MVision {
 class Vector2D
 {
+protected:
+    float _x, _y;
+
 public:
+    inline float x() const { return _x; }
+    inline float y() const { return _y; }
+
+    inline void setX(float value) { _x = value; }
+    inline void setY(float value) { _y = value; }
+
+    inline float& mutable_x() { return _x; }
+    inline float& mutable_y() { return _y; }
+
     Vector2D();
     Vector2D(float X, float Y);
 
-    // [FIXME] : fix here
-    float x, y;
-
     inline Vector2D& operator=(const Vector2D& other)
     {
-        x = other.x;
-        y = other.y;
+        _x = other._x;
+        _y = other._y;
         return *this;
     }
 
-    /** Addition of another vector to this one.
-      *\param other The other vector that will be added to this one
-      *\return A new object that contains the result of the calculation.
-      */
     inline Vector2D operator+(const Vector2D& other) const
     {
-        return Vector2D(x + other.x, y + other.y);
+        return Vector2D(_x + other._x, _y + other._y);
     }
 
-    /** Subtraction of another vector to this one.
-      *\param other The other vector that will be added to this one
-      *\return A new object that contains the result of the calculation.
-      */
     inline Vector2D operator-(const Vector2D& other) const
     {
-        return Vector2D(x - other.x, y - other.y);
+        return Vector2D(_x - other._x, _y - other._y);
     }
 
-    /** Negation of this vector.
-      *\return A new object that contains the result of the calculation.
-      */
     inline Vector2D operator-() const
     {
-        return Vector2D(-x, -y);
+        return Vector2D(-_x, -_y);
     }
 
-    /** Inner product of this vector and another one.
-      *\param other The other vector this one will be multiplied by
-      *\return The inner product.
-      */
     inline float operator*(const Vector2D& other) const
     {
-        return x * other.x + y * other.y;
+        return _x * other._x + _y * other._y;
     }
 
-    /** Multiplication of this vector by a factor.
-      *\param factor The factor this vector is multiplied by
-      *\return A new object that contains the result of the calculation.
-      */
     inline Vector2D operator*(const float& factor) const
     {
-        return Vector2D(x * factor, y * factor);
+        return Vector2D(_x * factor, _y * factor);
     }
 
-    /** Division of this vector by a factor.
-      *
-      *\param factor The factor this vector is divided by
-      *\return A new object that contains the result of the calculation.
-      */
     inline Vector2D operator/(const float& factor) const
     {
-        return Vector2D(x / factor, y / factor);
+        return Vector2D(_x / factor, _y / factor);
     }
 
-    /** Comparison of another vector with this one.
-      *\param other The other vector that will be compared to this one
-      *\return Whether the two vectors are equal.
-      */
     inline bool operator==(const Vector2D& other) const
     {
-        return x == other.x && y == other.y;
+        return _x == other._x && _y == other._y;
     }
 
-    /** Comparison of another vector with this one.
-      *\param other The other vector that will be compared to this one.
-      *\return Whether the two vectors are unequal.
-      */
     inline bool operator!=(const Vector2D& other) const
     {
-        return x != other.x || y != other.y;
+        return _x != other._x || _y != other._y;
     }
 
-    /** Calculation of the length of this vector.
-      *\return The length.
-      */
     inline float abs() const
     {
-        return std::sqrt(((float)x) * x + ((float)y) * y);
+        return std::sqrt(((float)_x) * _x + ((float)_y) * _y);
     }
 
-    /**
-      * Calculation of the square of the vector.
-      * \return The square
-      */
     inline float sqr() const
     {
-        return x * x + y * y;
+        return _x * _x + _y * _y;
     }
 
     inline bool operator <(const Vector2D &p) const
     {
-        return x < p.x || (x == p.x && y < p.y);
+        return _x < p._x || (_x == p._x && _y < p._y);
     }
 };
 }

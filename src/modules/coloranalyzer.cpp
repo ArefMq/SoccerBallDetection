@@ -111,29 +111,29 @@ void ColorAnalyzer::fieldBoundaryDetection()
     for (unsigned int x=0, i=0; x<_inputImage.width(); x++)
     {
         if ((i >= H.size()) ||
-            (i == 0 && x < H.at(i).x) ||
-            (i == H.size()-1 && x > H.at(i).x))
+            (i == 0 && x < H.at(i).x()) ||
+            (i == H.size()-1 && x > H.at(i).x()))
         {
             _boundaryPoints.at(x) = _inputImage.height();
         }
 
-        else if (x == H.at(i).x)
+        else if (x == H.at(i).x())
         {
-            _boundaryPoints.at(x) = H.at(i).y;
+            _boundaryPoints.at(x) = H.at(i).y();
             i++;
         }
 
-        else if (x < H.at(i).x)
+        else if (x < H.at(i).x())
         {
-            const float dx = (float)(x-H.at(i-1).x) / (float)(H.at(i).x-H.at(i-1).x);
-            const float dy = (float)(H.at(i).y-H.at(i-1).y);
-            _boundaryPoints.at(x) = dx*dy + H.at(i-1).y;
+            const float dx = (float)(x-H.at(i-1).x()) / (float)(H.at(i).x()-H.at(i-1).x());
+            const float dy = (float)(H.at(i).y()-H.at(i-1).y());
+            _boundaryPoints.at(x) = dx*dy + H.at(i-1).y();
         }
 
         else // if x > H.at(i).x
             std::cerr << "fault detected... [" << __FILE__ << " :: " << __LINE__
-                      << "]\n\tDetail:" << x << " => (" << H.at(i).x << ", "
-                      << H.at(i).y << ") -- i:" << i << std::endl;
+                      << "]\n\tDetail:" << x << " => (" << H.at(i).x() << ", "
+                      << H.at(i).y() << ") -- i:" << i << std::endl;
     }
 }
 

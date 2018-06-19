@@ -64,8 +64,8 @@ void EdgeImage::createLookup()
 
 void EdgeImage::refine(const Vector2D& topLeft, const Vector2D& bottomRight)
 {
-    for (int y=topLeft.y; y<bottomRight.y; ++y)
-        for (int x=topLeft.x; x<bottomRight.x; ++x)
+    for (int y=topLeft.y(); y<bottomRight.y(); ++y)
+        for (int x=topLeft.x(); x<bottomRight.x(); ++x)
         {
             Vector2D middle = Vector2D(x,y);
             Vector2D topLeftV = Vector2D(x-1, y-1);
@@ -74,7 +74,7 @@ void EdgeImage::refine(const Vector2D& topLeft, const Vector2D& bottomRight)
             Pixel edgePixel = black;
 
             edgePixel = calculateEdge(topLeftV, middle, bottomRightV);
-            setSafePixel(middle.x, middle.y, (edgePixel.y>100)?red:black);
+            setSafePixel(middle.x(), middle.y(), (edgePixel.y>100)?red:black);
 
             if (edgePixel.y < 128)
             {
@@ -82,7 +82,7 @@ void EdgeImage::refine(const Vector2D& topLeft, const Vector2D& bottomRight)
                 bottomRightV = Vector2D(x+2, y+2);
 
                 edgePixel = calculateEdge(topLeftV, middle, bottomRightV, 120);
-                setSafePixel(middle.x, middle.y, (edgePixel.y>140)?red:black);
+                setSafePixel(middle.x(), middle.y(), (edgePixel.y>140)?red:black);
             }
         }
 }
@@ -90,24 +90,24 @@ void EdgeImage::refine(const Vector2D& topLeft, const Vector2D& bottomRight)
 void EdgeImage::refine(const Vector2D& point)
 {
     // [FIXME] : I'm not sure about the step, revise the way of step calculation
-    const int step = edgeingStep(point.y-originY);// + edgeingStep(point.y));
+    const int step = edgeingStep(point.y()-originY);// + edgeingStep(point.y));
 
-    const int startX = (point.x-step)>1 ? (point.x-step) : 1;
-    const int startY = (point.y-step)>1 ? (point.y-step) : 1;
+    const int startX = (point.x()-step)>1 ? (point.x()-step) : 1;
+    const int startY = (point.y()-step)>1 ? (point.y()-step) : 1;
 
-    const int endX = (point.x+step)<(_width-1)  ? (point.x+step) : (_width-1);
-    const int endY = (point.y+step)<(_height-1) ? (point.y+step) : (_height-1);
+    const int endX = (point.x()+step)<(_width-1)  ? (point.x()+step) : (_width-1);
+    const int endY = (point.y()+step)<(_height-1) ? (point.y()+step) : (_height-1);
 
 
     for (int y=startY; y<endY; ++y)
         for (int x=startX; x<endX; ++x)
         {
-            if (x == point.x && y == point.y)
+            if (x == point.x() && y == point.y())
                 continue;
 
             Vector2D middle = Vector2D(x,y);
 
-            if (middle.x < (int)_width && middle.x > -1 && middle.y < (int)_height && middle.y > -1 && getPixel(middle.x, middle.y).y != 0)
+            if (middle.x() < (int)_width && middle.x() > -1 && middle.y() < (int)_height && middle.y() > -1 && getPixel(middle.x(), middle.y()).y != 0)
                 continue;
 
             Vector2D topLeft = Vector2D(x-1, y-1);
@@ -115,7 +115,7 @@ void EdgeImage::refine(const Vector2D& point)
 
             Pixel edgePixel = black;
             edgePixel = calculateEdge(topLeft, middle, bottomRight);
-            setSafePixel(middle.x, middle.y, (edgePixel.y>127)?red:black);
+            setSafePixel(middle.x(), middle.y(), (edgePixel.y>127)?red:black);
         }
 }
 
@@ -148,29 +148,29 @@ void EdgeImage::update()
                     (row<_scanGraphLookup.size()-1)?stepTable_Y(row+1,0):stepTable_Y(row,col)+1
             );
 
-            if (middle.x >= fieldBoundaries.size() || middle.y < fieldBoundaries.at(middle.x))
+            if (middle.x() >= fieldBoundaries.size() || middle.y() < fieldBoundaries.at(middle.x()))
                 continue;
 
-            if (bottomRight.x >= _width || bottomRight.y >= _height)
+            if (bottomRight.x() >= _width || bottomRight.y() >= _height)
                 break;
-            if (topLeft.x < 0 || topLeft.y < 0)
+            if (topLeft.x() < 0 || topLeft.y() < 0)
                 continue;
 
             Pixel edgePixel = black;
             edgePixel = calculateEdge(topLeft, middle, bottomRight, 100);
-            setSafePixel(middle.x, middle.y, edgePixel);
+            setSafePixel(middle.x(), middle.y(), edgePixel);
         }
 }
 
 Image::Pixel EdgeImage::calculateEdge(const Vector2D& topLeft, const Vector2D& middle, const Vector2D& bottomRight, int thresh)
 {
 #ifdef DEBUG
-    if (topLeft.x < 0 || topLeft.x >= _width || topLeft.y < 0 || topLeft.y >= _height)
-        std::cerr << "invalid injection => top left...     (" << topLeft.x << ", " << topLeft.y << ") - (" << middle.x << ", " << middle.y << ") - (" << bottomRight.x << ", " << bottomRight.y << ")" << std::endl;
-    if (middle.x < 0 || middle.x >= _width || middle.y < 0 || middle.y >= _height)
-        std::cerr << "invalid injection => middle...       (" << topLeft.x << ", " << topLeft.y << ") - (" << middle.x << ", " << middle.y << ") - (" << bottomRight.x << ", " << bottomRight.y << ")" << std::endl;
-    if (bottomRight.x < 0 || bottomRight.x >= _width || bottomRight.y < 0 || bottomRight.y >= _height)
-        std::cerr << "invalid injection => bottom right... (" << topLeft.x << ", " << topLeft.y << ") - (" << middle.x << ", " << middle.y << ") - (" << bottomRight.x << ", " << bottomRight.y << ")" << std::endl;
+    if (topLeft.x() < 0 || topLeft.x() >= _width || topLeft.y() < 0 || topLeft.y() >= _height)
+        std::cerr << "invalid injection => top left...     (" << topLeft.x() << ", " << topLeft.y() << ") - (" << middle.x() << ", " << middle.y() << ") - (" << bottomRight.x() << ", " << bottomRight.y() << ")" << std::endl;
+    if (middle.x() < 0 || middle.x() >= _width || middle.y() < 0 || middle.y() >= _height)
+        std::cerr << "invalid injection => middle...       (" << topLeft.x() << ", " << topLeft.y() << ") - (" << middle.x() << ", " << middle.y() << ") - (" << bottomRight.x() << ", " << bottomRight.y() << ")" << std::endl;
+    if (bottomRight.x() < 0 || bottomRight.x() >= _width || bottomRight.y() < 0 || bottomRight.y() >= _height)
+        std::cerr << "invalid injection => bottom right... (" << topLeft.x() << ", " << topLeft.y() << ") - (" << middle.x() << ", " << middle.y() << ") - (" << bottomRight.x() << ", " << bottomRight.y() << ")" << std::endl;
 #endif
     // [TODO] : implement a better filter
 
@@ -181,17 +181,17 @@ Image::Pixel EdgeImage::calculateEdge(const Vector2D& topLeft, const Vector2D& m
     //   [ +1  +2  +1 ]
     //   And it is the same for horizontal except with a counter clockwise flip
 
-    Pixel a0; getSafeOrginalPixel(topLeft.x,     topLeft.y, a0);
-    Pixel a1; getSafeOrginalPixel(middle.x,      topLeft.y, a1);
-    Pixel a2; getSafeOrginalPixel(bottomRight.x, topLeft.y, a2);
+    Pixel a0; getSafeOrginalPixel(topLeft.x(),     topLeft.y(), a0);
+    Pixel a1; getSafeOrginalPixel(middle.x(),      topLeft.y(), a1);
+    Pixel a2; getSafeOrginalPixel(bottomRight.x(), topLeft.y(), a2);
 
-    Pixel a3; getSafeOrginalPixel(topLeft.x,     middle.y, a3);
-    Pixel a4; getSafeOrginalPixel(middle.x,      middle.y, a4);
-    Pixel a5; getSafeOrginalPixel(bottomRight.x, middle.y, a5);
+    Pixel a3; getSafeOrginalPixel(topLeft.x(),     middle.y(), a3);
+    Pixel a4; getSafeOrginalPixel(middle.x(),      middle.y(), a4);
+    Pixel a5; getSafeOrginalPixel(bottomRight.x(), middle.y(), a5);
 
-    Pixel a6; getSafeOrginalPixel(topLeft.x,     bottomRight.y, a6);
-    Pixel a7; getSafeOrginalPixel(middle.x,      bottomRight.y, a7);
-    Pixel a8; getSafeOrginalPixel(bottomRight.x, bottomRight.y, a8);
+    Pixel a6; getSafeOrginalPixel(topLeft.x(),     bottomRight.y(), a6);
+    Pixel a7; getSafeOrginalPixel(middle.x(),      bottomRight.y(), a7);
+    Pixel a8; getSafeOrginalPixel(bottomRight.x(), bottomRight.y(), a8);
 
     const int sobelVerticalY  = ((-a0.y  - 2*a1.y  - a2.y)  /* + 0*a3.y  + 0*a4.y  + 0*a5.y  */ + (a6.y  + 2*a7.y  + a8.y))  / 4;
     const int sobelVerticalCb = ((-a0.cb - 2*a1.cb - a2.cb) /* + 0*a3.cb + 0*a4.cb + 0*a5.cb */ + (a6.cb + 2*a7.cb + a8.cb)) / 4;

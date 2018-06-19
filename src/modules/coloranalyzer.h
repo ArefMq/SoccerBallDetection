@@ -94,7 +94,7 @@ private: // [FIXME] : remove this line
      * @param p1, p2, p3: given points
      * @return true if the given points are clockwise.
      */
-    inline double ccw(const Vector2D& p1, const Vector2D& p2, const Vector2D& p3) { return (p2.x - p1.x)*(p3.y - p1.y) - (p2.y - p1.y)*(p3.x - p1.x); }
+    inline double ccw(const Vector2D& p1, const Vector2D& p2, const Vector2D& p3) { return (p2.x() - p1.x())*(p3.y() - p1.y()) - (p2.y() - p1.y())*(p3.x() - p1.x()); }
 
 #ifdef DEBUG
 public:

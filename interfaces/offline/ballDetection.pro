@@ -42,7 +42,8 @@ SOURCES += main.cpp\
     ../../src/modules/kinematicsprovider.cpp \
     ../../src/modules/patternrecognizer.cpp \
     ../../src/tools/vector3D.cpp \
-    ../../src/modules/ml/mmlwrapper.cpp
+    streamloader.cpp \
+    singleimageloader.cpp
 
 HEADERS  += mainwindow.h \
     ../../src/tools/image.h \
@@ -56,8 +57,9 @@ HEADERS  += mainwindow.h \
     ../../src/modules/kinematicsprovider.h \
     ../../src/modules/patternrecognizer.h \
     ../../src/tools/vector3D.h \
-    ../../src/modules/ml/mmlwrapper.h \
-    util.h
+    util.h \
+    streamloader.h \
+    singleimageloader.h
 
 FORMS    += mainwindow.ui
 

@@ -6,6 +6,7 @@
 #include "modules/patternrecognizer.h"
 
 #include <iostream>
+#include <math.h>
 
 #if defined(_WIN64) || defined(_WIN32)
 #include <windows.h>
@@ -70,15 +71,15 @@ void BallDetector::update()
     for (std::vector<Circle>::const_iterator itr = circles.begin(); itr < circles.end(); itr++)
     {
         Circle circle = *itr;
-        houghTransform->resizeCirlcle(circle, colorAnalyzer->boundary(circle._translation.x) /*kinematicsProvider.getHorizon()*/, *colorAnalyzer);
-        houghTransform->resizeCirlcle(circle, colorAnalyzer->boundary(circle._translation.x) /*kinematicsProvider.getHorizon()*/, *colorAnalyzer);
+        houghTransform->resizeCirlcle(circle, colorAnalyzer->boundary(circle.translation().x()) /*kinematicsProvider.getHorizon()*/, *colorAnalyzer);
+        houghTransform->resizeCirlcle(circle, colorAnalyzer->boundary(circle.translation().x()) /*kinematicsProvider.getHorizon()*/, *colorAnalyzer);
 
         //-- First Step Size Check
-        if (circle._radious < 2.5 || circle._radious > 80) // [TODO] : make this config : ball max size in px
+        if (circle.radious() < 2.5 || circle.radious() > 80) // [TODO] : make this config : ball max size in px
             continue;
 
         //-- Check green percentage
-        if (!checkWhitePercentage(circle._translation.x, circle._translation.y, circle._radious))
+        if (!checkWhitePercentage(circle.translation().x(), circle.translation().y(), circle.radious()))
             continue;
 
         //-- Check ball pattern
@@ -90,12 +91,12 @@ void BallDetector::update()
         int scoreCount=0; Circle bestCircleCandidate = circle;
         for (unsigned int i=0; i<extCircles.size(); ++i)
         {
-            if (abs(extCircles.at(i)._translation.x - circle._translation.x) < 5 &&
-                abs(extCircles.at(i)._translation.y - circle._translation.y) < 5)
+            if (std::abs(extCircles.at(i).translation().x() - circle.translation().x()) < 5 &&
+                std::abs(extCircles.at(i).translation().y() - circle.translation().y()) < 5)
             {
-                bestCircleCandidate._translation.x += extCircles.at(i)._translation.x;
-                bestCircleCandidate._translation.y += extCircles.at(i)._translation.y;
-                bestCircleCandidate._radious += extCircles.at(i)._radious;
+                bestCircleCandidate.mutable_translation().mutable_x() += extCircles.at(i).translation().x();
+                bestCircleCandidate.mutable_translation().mutable_y() += extCircles.at(i).translation().y();
+                bestCircleCandidate.mutable_radious() += extCircles.at(i).radious();
                 scoreCount++;
             }
         }
@@ -103,13 +104,13 @@ void BallDetector::update()
         if (scoreCount > maxScore)
         {
             //-- Apply average filter
-            bestCircleCandidate._translation.x /= scoreCount+1;
-            bestCircleCandidate._translation.y /= scoreCount+1;
-            bestCircleCandidate._radious /= scoreCount+1;
+            bestCircleCandidate.mutable_translation().mutable_x() /= scoreCount+1;
+            bestCircleCandidate.mutable_translation().mutable_y() /= scoreCount+1;
+            bestCircleCandidate.mutable_radious() /= scoreCount+1;
             maxScore = scoreCount;
             bestCircle = bestCircleCandidate;
 
-            houghTransform->resizeCirlcle(bestCircle, colorAnalyzer->boundary(bestCircle._translation.x) /*kinematicsProvider.getHorizon()*/, *colorAnalyzer);
+            houghTransform->resizeCirlcle(bestCircle, colorAnalyzer->boundary(bestCircle.translation().x()) /*kinematicsProvider.getHorizon()*/, *colorAnalyzer);
         }
 
         extCircles.push_back(circle);
@@ -118,7 +119,7 @@ void BallDetector::update()
     //-- Deliver the results
     Ball ball(bestCircle);
     _results.push_back(ball);
-    _previousPoints.push_back(ball.PositionInImage()._translation);
+    _previousPoints.push_back(ball.PositionInImage().translation());
 
 //    checkBallTexture(bestCircle);
 #else
@@ -126,7 +127,7 @@ void BallDetector::update()
         //-- Deliver the results
         Ball ball(circle);
         _results.push_back(ball);
-        _previousPoints.push_back(ball.PositionInImage()._translation);
+        _previousPoints.push_back(ball.PositionInImage().translation());
     }
 #endif
 }
@@ -185,7 +186,7 @@ double BallDetector::averageCycleTime() const
 
 bool BallDetector::checkBallTexture(const Circle& ball)
 {
-    return patternRecognizer->predict(_image, ball, PatternRecognizer::Ball);
+    return patternRecognizer->predict(_image, ball);
 }
 
 #ifdef DEBUG

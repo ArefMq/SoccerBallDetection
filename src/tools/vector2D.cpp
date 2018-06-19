@@ -2,10 +2,10 @@
 
 using namespace MVision;
 
-Vector2D::Vector2D() : x(0), y(0)
+Vector2D::Vector2D() : _x(0), _y(0)
 {
 }
 
-Vector2D::Vector2D(float X, float Y) : x(X), y(Y)
+Vector2D::Vector2D(float X, float Y) : _x(X), _y(Y)
 {
 }

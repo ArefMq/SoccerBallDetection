@@ -114,7 +114,7 @@ private:
         if (row < 0 || col < 0 || row >= (int)_scanGraphLookup.size() || col >= (int)_scanGraphLookup.at(row).size())
             std::cerr << "invalid indexing..." << __FILE__ << " :: " << __LINE__ << "\n(" << row << ", " << col << ")\n";
 #endif
-        return _scanGraphLookup.at(row).at(col).x;
+        return _scanGraphLookup.at(row).at(col).x();
     }
 
     inline float stepTable_Y(int row, int col)
@@ -123,7 +123,7 @@ private:
         if (row < 0 || col < 0 || row >= (int)_scanGraphLookup.size() || col >= (int)_scanGraphLookup.at(row).size())
             std::cerr << "invalid indexing..." << __FILE__ << " :: " << __LINE__ << "\n(" << row << ", " << col << ")\n";
 #endif
-        return (_scanGraphLookup.at(row).at(col).y+originY);
+        return (_scanGraphLookup.at(row).at(col).y()+originY);
     }
 };
 }

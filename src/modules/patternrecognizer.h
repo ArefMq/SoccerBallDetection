@@ -9,12 +9,6 @@
 
 #include "tools/image.h"
 #include "tools/circle.h"
-#include "ml/mmlwrapper.h"
-
-//#include "opencv2/highgui/highgui.hpp"
-//#include "opencv2/imgproc/imgproc.hpp"
-//#include "opencv/cv.h"
-//#include "opencv/ml.h"
 
 
 namespace MVision {
@@ -25,16 +19,12 @@ public:
     PatternRecognizer();
     ~PatternRecognizer();
 
-    enum Pattern {Unknown=-1, Ball};
-
     void load();
-    bool predict(const Image& image, const Circle& ROI, Pattern pattern);
+    bool predict(const Image& image, const Circle& ROI);
 
 private:
     void getGrayROI(const Image& image, const Circle& ROI);
     char* grayROIImage;
-
-    MMLWrapper* mmlw;
 };
 
 } //-- End namespace MVision

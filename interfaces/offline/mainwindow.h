@@ -5,6 +5,8 @@
 
 #include "image.h"
 #include "balldetector.h"
+#include "streamloader.h"
+#include "singleimageloader.h"
 
 namespace Ui {
 class MainWindow;
@@ -19,26 +21,20 @@ public:
     ~MainWindow();
 
 private slots:
-    void on_btn_referesh_clicked();
-    void on_btn_next_clicked();
-    void on_radio_image_clicked();
-    void on_radio_edge_clicked();
+    void on_stream_selector_currentIndexChanged(const QString &arg1);
+    void on_btn_open_clicked();
+    void on_btn_reload_clicked();
+    void on_btn_previous_clicked();
+    void on_btn_pause_clicked();
+    void on_btn_play_clicked();
+    void on_btn_forward_clicked();
+
+    void on_frame_ready();
 
 private:
     Ui::MainWindow *ui;
-    QImage monitor, edgeMonitor;
-
     MVision::BallDetector ballDetector;
-
-    bool isEdgeImageSelected() const;
-    void setImageToMonitor();
-
-    void runBallDetector(const MVision::Image &image);
-    void runWithAFileName(const QString& filename);
-
-    // [TODO] : here might need a refactor as well
-    void scanDatasetDirectory(const QString& dir_path);
-    std::vector<QString> dataset;
+    SingleImageLoader* streamLoader;
 };
 
 #endif // MAINWINDOW_H
