@@ -1,8 +1,9 @@
 #ifndef STREAMLOADER_H
 #define STREAMLOADER_H
 
-#include <qimage.h> // TODO : change this one
+#include <qimage.h>
 #include <qobject.h>
+#include "tools/image.h"
 
 class StreamLoader : public QObject
 {
@@ -11,7 +12,6 @@ public:
 
 protected:
     StreamLoader() {}
-
     QImage _frame;
 
 public:
@@ -26,6 +26,7 @@ public:
     virtual void previous_frame()=0;
 
     const QImage& frame() const { return _frame; }
+    MVision::Image convertFrameToMVImage() const;
 
 signals:
     void frame_ready();

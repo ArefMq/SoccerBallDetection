@@ -23,8 +23,6 @@ MainWindow::MainWindow(QWidget *parent) :
 {
     ui->setupUi(this);
     on_stream_selector_currentIndexChanged("Single Image");
-
-    ballDetector.test();
 }
 
 MainWindow::~MainWindow()
@@ -154,8 +152,11 @@ void MainWindow::on_btn_forward_clicked()
 
 void MainWindow::on_frame_ready()
 {
+    debugger.setImage(streamLoader->frame());
+    ballDetector.update(streamLoader->convertFrameToMVImage());
+
+    //-- Show Frame
     ui->monitor->setText("");
-    const QImage& image = streamLoader->frame().scaled(ui->monitor->size(), Qt::KeepAspectRatio);
+    const QImage& image = debugger.getImage().scaled(ui->monitor->size(), Qt::KeepAspectRatio);
     ui->monitor->setPixmap(QPixmap::fromImage(image));
-    cout << "frame recieved!" << endl;
 }

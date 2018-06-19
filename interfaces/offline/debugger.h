@@ -2,6 +2,8 @@
 #define DEBUGGER_H
 
 #include "debughelperinterface.h"
+#include <qimage.h>
+#include <qpainter.h>
 
 class Debugger : public DebugHelperInterface
 {
@@ -21,6 +23,13 @@ public:
     void draw_circle(int x1, int y1, int x2, int y2);
     void draw_circle(int cx, int cy, int r);
     void draw_rect(int x, int y, int w, int h);
+
+    void setImage(const QImage& image);
+    const QImage& getImage();
+
+private:
+    QImage _image;
+    QPainter* qpn;
 };
 
 #endif // DEBUGGER_H
