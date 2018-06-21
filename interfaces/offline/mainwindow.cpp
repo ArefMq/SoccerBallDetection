@@ -30,70 +30,6 @@ MainWindow::~MainWindow()
     delete ui;
 }
 
-
-//void MainWindow::runBallDetector(const Image &image)
-//{
-//    monitor = image2qimage(image);
-//    QPainter* qpn = new QPainter(&monitor);
-
-//    ballDetector.update(image);
-//    edgeMonitor = image2qimage(ballDetector.debug_GetEdgeImage());
-
-//    typedef std::vector<Ball> Balls;
-//    const Balls& results = ballDetector.getResults();
-//    for (Balls::const_iterator itr=results.begin(); itr<results.end(); itr++)
-//    {
-//        const Ball& b = *itr;
-//        qpn->setPen(QPen(Qt::red, 3));
-//        qpn->drawEllipse(QPointF(b.PositionInImage()._translation.x, b.PositionInImage()._translation.y), b.PositionInImage()._radious, b.PositionInImage()._radious);
-//    }
-
-//    delete qpn;
-//}
-
-//void MainWindow::runWithAFileName(const QString& filename)
-//{
-//    Image img = loadImage(filename);
-//    runBallDetector(img);
-//    setImageToMonitor();
-//}
-
-//void MainWindow::scanDatasetDirectory(const QString& dir_path)
-//{
-//    dataset.clear();
-
-//    DIR *dir;
-//    class dirent *ent;
-//    class stat st;
-
-//    dir = opendir(dir_path.toStdString().c_str());
-//    while ((ent = readdir(dir)) != NULL)
-//    {
-//        const string file_name = ent->d_name;
-//        const string full_file_name = dir_path.toStdString() + "/" + file_name;
-
-//        if (file_name[0] == '.')
-//            continue;
-
-//        if (stat(full_file_name.c_str(), &st) == -1)
-//            continue;
-
-//        const bool is_directory = (st.st_mode & S_IFDIR) != 0;
-
-//        if (is_directory)
-//            continue;
-
-//#ifdef DEBUG
-//        cout << "processing : " << file_name.c_str() << "\n";
-//#endif
-//        dataset.push_back(QString(full_file_name.c_str()));
-//        ui->btn_next->setEnabled(true);
-//        ui->btn_referesh->setEnabled(true);
-//    }
-//    closedir(dir);
-//}
-
-
 void MainWindow::on_stream_selector_currentIndexChanged(const QString &arg1)
 {
     if (streamLoader)
@@ -154,6 +90,18 @@ void MainWindow::on_frame_ready()
 {
     debugger.setImage(streamLoader->frame());
     ballDetector.update(streamLoader->convertFrameToMVImage());
+
+    typedef std::vector<Ball> Balls;
+    const Balls& results = ballDetector.getResults();
+    for (Balls::const_iterator itr=results.begin(); itr<results.end(); itr++)
+    {
+        const Ball& b = *itr;
+        debugger.setPen(Debugable::Green);
+        int x = b.PositionInImage().translation().x();
+        int y = b.PositionInImage().translation().y();
+        int r = b.PositionInImage().radious();
+        debugger.draw_circle(x, y, r);
+    }
 
     //-- Show Frame
     ui->monitor->setText("");
