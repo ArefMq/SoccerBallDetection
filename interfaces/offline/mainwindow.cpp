@@ -23,6 +23,7 @@ MainWindow::MainWindow(QWidget *parent) :
 {
     ui->setupUi(this);
     on_stream_selector_currentIndexChanged("Single Image");
+    on_btn_open_clicked(); // [FIXME]:  remove this line
 }
 
 MainWindow::~MainWindow()
@@ -96,7 +97,7 @@ void MainWindow::on_frame_ready()
     for (Balls::const_iterator itr=results.begin(); itr<results.end(); itr++)
     {
         const Ball& b = *itr;
-        debugger.setPen(Debugable::Green);
+        debugger.setPen(DebugHelperInterface::Green);
         int x = b.PositionInImage().translation().x();
         int y = b.PositionInImage().translation().y();
         int r = b.PositionInImage().radious();

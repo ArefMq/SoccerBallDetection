@@ -16,6 +16,7 @@
 using namespace MVision;
 
 ColorAnalyzer::ColorAnalyzer(const Image &InputImage) :
+    Debugable("color_analyzer"),
     _inputImage(InputImage)
 {
 }

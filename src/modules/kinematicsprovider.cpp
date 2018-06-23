@@ -2,8 +2,7 @@
 
 using namespace MVision;
 
-KinematicsProvider::KinematicsProvider()
+KinematicsProvider::KinematicsProvider() : Debugable("kinematics_provider")
 {
-
 }
 

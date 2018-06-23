@@ -17,6 +17,7 @@ using namespace MVision;
 #define FRHT_ITERATIONS 150
 
 FRHT::FRHT(EdgeImage& image) :
+    Debugable("frht"),
     _image(image)
 {
     srand(time(0));

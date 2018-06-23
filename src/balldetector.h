@@ -23,6 +23,8 @@ public:
     BallDetector(DebugHelperInterface* debugHelper=0);
 	~BallDetector();
 
+    void test() { print("hello world!"); }
+
 	/**
 	 * @brief main process function; run the ball detection module on given image.
 	 * This do three things: 1) update the input image. 2) call the private

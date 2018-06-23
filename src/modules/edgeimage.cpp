@@ -18,6 +18,7 @@ float EdgeImage::expCStep;
 float EdgeImage::horizonOffset;
 
 EdgeImage::EdgeImage(const Image& image) :
+    Debugable("edge_image"),
     originY(0),
     _image(image)
 {

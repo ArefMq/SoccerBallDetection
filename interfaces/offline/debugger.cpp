@@ -4,30 +4,58 @@ using namespace std;
 
 Debugger::Debugger() : qpn(0), _current_color(None)
 {
+    i=0;
 }
 
-void Debugger::print(const char* message, Color c)
+void Debugger::print(const char* message, Color c, const char* Context)
 {
+    if (!_contex_map[QString(Context)])
+        return;
+
     cout << message << endl;
 }
 
-void Debugger::info(const char* message, Color c)
+void Debugger::info(const char* message, Color c, const char* Context)
 {
+    if (!_contex_map[QString(Context)])
+        return;
+
     cout << "[INFO] " << message << endl;
 }
 
-void Debugger::error(const char* message, Color c)
+void Debugger::error(const char* message, Color c, const char* Context)
 {
+    if (!_contex_map[QString(Context)])
+        return;
+
     cout << "[ERROR] " << message << endl;
 }
 
-void Debugger::warning(const char* message, Color c)
+void Debugger::warning(const char* message, Color c, const char* Context)
 {
+    if (!_contex_map[QString(Context)])
+        return;
+
     cout << "[WARNING] " << message << endl;
 }
 
-void Debugger::draw_pixel(int x, int y, char* color)
+void Debugger::draw_pixel(int x, int y, Color color, const char* Context)
 {
+    if (!_contex_map[QString(Context)])
+        return;
+
+    if (qpn)
+    {
+        setPen(color);
+        qpn->drawPoint(x, y);
+    }
+}
+
+void Debugger::draw_pixel(int x, int y, char* color, const char* Context)
+{
+    if (!_contex_map[QString(Context)])
+        return;
+
     if (qpn)
     {
         QColor c = QColor(color[0], color[1], color[2]);
@@ -36,8 +64,11 @@ void Debugger::draw_pixel(int x, int y, char* color)
     }
 }
 
-void Debugger::draw_point(int x, int y, Color c)
+void Debugger::draw_point(int x, int y, Color c, const char* Context)
 {
+    if (!_contex_map[QString(Context)])
+        return;
+
     if (qpn)
     {
         setPen(c);
@@ -45,8 +76,11 @@ void Debugger::draw_point(int x, int y, Color c)
     }
 }
 
-void Debugger::draw_line(int x1, int y1, int x2, int y2, Color c)
+void Debugger::draw_line(int x1, int y1, int x2, int y2, Color c, const char* Context)
 {
+    if (!_contex_map[QString(Context)])
+        return;
+
     if (qpn)
     {
         setPen(c);
@@ -54,8 +88,11 @@ void Debugger::draw_line(int x1, int y1, int x2, int y2, Color c)
     }
 }
 
-void Debugger::draw_circle(int x, int y, int w, int h, Color c)
+void Debugger::draw_circle(int x, int y, int w, int h, Color c, const char* Context)
 {
+    if (!_contex_map[QString(Context)])
+        return;
+
     if (qpn)
     {
         setPen(c);
@@ -63,8 +100,11 @@ void Debugger::draw_circle(int x, int y, int w, int h, Color c)
     }
 }
 
-void Debugger::draw_circle(int cx, int cy, int r, Color c)
+void Debugger::draw_circle(int cx, int cy, int r, Color c, const char* Context)
 {
+    if (!_contex_map[QString(Context)])
+        return;
+
     if (qpn)
     {
         setPen(c);
@@ -72,8 +112,11 @@ void Debugger::draw_circle(int cx, int cy, int r, Color c)
     }
 }
 
-void Debugger::draw_rect(int x, int y, int w, int h, Color c)
+void Debugger::draw_rect(int x, int y, int w, int h, Color c, const char* Context)
 {
+    if (!_contex_map[QString(Context)])
+        return;
+
     if (qpn)
     {
         setPen(c);
@@ -161,6 +204,14 @@ void Debugger::setPen(Color c)
     case None:
         break;
     }
+}
 
+void Debugger::enableContext(QString Context)
+{
+    _contex_map[Context] = true;
+}
 
+void Debugger::disableContext(QString Context)
+{
+    _contex_map[Context] = false;
 }

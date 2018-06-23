@@ -14,6 +14,7 @@
 
 namespace MVision {
 
+// [TODO] : change name to circle detector
 class FRHT : public Debugable
 {
 public:

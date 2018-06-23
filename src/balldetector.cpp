@@ -21,6 +21,7 @@
 using namespace MVision;
 
 BallDetector::BallDetector(DebugHelperInterface *debugHelper) :
+    Debugable("ball_detector"),
     _averageCycleTime(-1),
     colorAnalyzer(new ColorAnalyzer(_image)),
     edgeImage(new EdgeImage(_image)),

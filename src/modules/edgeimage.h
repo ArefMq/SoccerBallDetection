@@ -19,6 +19,7 @@
 
 namespace MVision {
 
+// change name to edge detector
 class EdgeImage : public Image, public Debugable
 {
 public:

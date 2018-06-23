@@ -17,14 +17,12 @@ using namespace MVision;
 
 #define CV_WIN_SIZE 128
 
-PatternRecognizer::PatternRecognizer()
+PatternRecognizer::PatternRecognizer() : Debugable("pattern_recognizer")
 {
-
 }
 
 PatternRecognizer::~PatternRecognizer()
 {
-
 }
 
 void PatternRecognizer::load()
