@@ -49,25 +49,12 @@ public:
      * @param x, y: given coordinate
      * @return false if the color is field-green
      */
-    bool notGreen(int x, int y) const;
-    /**
-     * @brief get the pixel of given coordinate from input image and then compare
-     * it to the static threshold.
-     * @param x, y: given coordinate
-     * @return true if the color is field-green
-     */
     bool isWhite(int x, int y) const;
     /**
      * @brief get the pixel of given coordinate from input image and then compare
      * it to the static threshold.
      * @param x, y: given coordinate
      * @return false if the color is field-green
-     */
-    bool notWhite(int x, int y) const;
-    /**
-     * @brief gives the height of the field boundary in the given x
-     * @param x: position of the column to check
-     * @return the position of the field boundary in the given column
      */
     inline int boundary(int x) const { return _boundaryPoints.at(x < 0 ? 0 : (x >= (int)_inputImage.width() - 1 ? (int)_inputImage.width() - 1 : x)); }
 

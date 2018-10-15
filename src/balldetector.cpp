@@ -169,7 +169,7 @@ int BallDetector::searchedColor(int x, int y, int& color, int& nonGreen)
 {
   if (x > -1 && x < (int)_image.width() && y > -1 && y < (int)_image.height())
   {
-    nonGreen += colorAnalyzer->notGreen(x, y);
+    nonGreen += colorAnalyzer->!isGreen(x, y);
     color += colorAnalyzer->isWhite(x, y);
     return 1;
   }

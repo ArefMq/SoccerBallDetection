@@ -144,18 +144,8 @@ bool ColorAnalyzer::isGreen(int x, int y) const
     return (d < 10 && d > -10);
 }
 
-bool ColorAnalyzer::notGreen(int x, int y) const
-{
-    return !isGreen(x, y);
-}
-
 bool ColorAnalyzer::isWhite(int x, int y) const
 {
     const Image::Pixel p = _inputImage.getPixel(x, y);
     return (p.y > 180 && std::abs(p.cb - 127) < 50 && std::abs(p.cr - 127) < 50);
-}
-
-bool ColorAnalyzer::notWhite(int x, int y) const
-{
-    return !isWhite(x, y);
 }
