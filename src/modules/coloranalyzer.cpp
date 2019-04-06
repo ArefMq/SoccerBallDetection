@@ -48,9 +48,10 @@ void ColorAnalyzer::histogramAnalysis()
     _greenPeak = peak;
 
 #ifdef DEBUG
+#define HISTOGRAM_BOX 100
     for (int i=0; i<256; ++i)
-        debug_histogram[i] = histogram[i];
-    debug_peak = peak;
+        draw_line(i, HISTOGRAM_BOX, i, HISTOGRAM_BOX - (HISTOGRAM_BOX * histogram[i] / peakValue), DebugHelperInterface::Green);
+    draw_line(peak, HISTOGRAM_BOX, peak, HISTOGRAM_BOX - HISTOGRAM_BOX, DebugHelperInterface::Red);
 #endif
 }
 
@@ -83,7 +84,7 @@ void ColorAnalyzer::fieldBoundaryDetection()
                 break;
         }
 
-        y += noise+whiteSkip;
+        y += noise + whiteSkip;
         if (y < 100) // [FIXME] : [FIXME] : change this with horizon
             y = 100;
         highestPoints.push_back(Vector2D(x, y));

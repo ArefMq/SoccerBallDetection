@@ -126,9 +126,10 @@ void Debugger::draw_rect(int x, int y, int w, int h, Color c, const char* Contex
 
 void Debugger::setImage(const QImage& image)
 {
-    _image = image;
     if (qpn)
         delete qpn;
+
+    _image = image;
     qpn = new QPainter(&_image);
     qpn->setPen(QPen(Qt::red, 3));
 }
@@ -214,4 +215,9 @@ void Debugger::enableContext(QString Context)
 void Debugger::disableContext(QString Context)
 {
     _contex_map[Context] = false;
+}
+
+void Debugger::setContexEnabled(QString Context, bool isEnabled)
+{
+    _contex_map[Context] = isEnabled;
 }

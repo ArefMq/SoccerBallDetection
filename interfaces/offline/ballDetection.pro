@@ -46,7 +46,8 @@ SOURCES += main.cpp\
     streams/streamloader.cpp \
     streams/singleimageloader.cpp \
     ../../src/debughelperinterface.cpp \
-    debugger.cpp
+    debugger.cpp \
+    streams/imagedirectoryloader.cpp
 
 HEADERS  += mainwindow.h \
     ../../src/tools/image.h \
@@ -64,7 +65,8 @@ HEADERS  += mainwindow.h \
     streams/streamloader.h \
     streams/singleimageloader.h \
     ../../src/debughelperinterface.h \
-    debugger.h
+    debugger.h \
+    streams/imagedirectoryloader.h
 
 FORMS    += mainwindow.ui
 

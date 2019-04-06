@@ -33,6 +33,7 @@ public:
     void setPen(Color c);
     void enableContext(QString Context);
     void disableContext(QString Context);
+    void setContexEnabled(QString Context, bool isEnabled);
 
 private:
     QImage _image;

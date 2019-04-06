@@ -10,6 +10,7 @@
 #include <sys/stat.h>
 
 #include "streams/singleimageloader.h"
+#include "streams/imagedirectoryloader.h"
 #define pl std::cout << __FILE__ << " :: " << __LINE__ << std::endl;
 
 using namespace std;
@@ -23,7 +24,8 @@ MainWindow::MainWindow(QWidget *parent) :
 {
     ui->setupUi(this);
     on_stream_selector_currentIndexChanged("Single Image");
-    on_btn_open_clicked(); // [FIXME]:  remove this line
+    update_contexts();
+//    on_btn_open_clicked(); // [FIXME]:  remove this line
 }
 
 MainWindow::~MainWindow()
@@ -36,11 +38,11 @@ void MainWindow::on_stream_selector_currentIndexChanged(const QString &arg1)
     if (streamLoader)
         delete streamLoader;
 
-
     if (arg1 == "Single Image")
         streamLoader = new SingleImageLoader();
-//    if (arg1 == "Image Directory")
-//        streamLoader = new SingleImageLoader();
+    if (arg1 == "Image Directory")
+        streamLoader = new ImageDirectoryLoader();
+
 //    if (arg1 == "Camera Device")
 //        streamLoader = new SingleImageLoader();
 //    if (arg1 == "Video Stream")
@@ -50,7 +52,6 @@ void MainWindow::on_stream_selector_currentIndexChanged(const QString &arg1)
         return;
 
     connect(streamLoader, SIGNAL(frame_ready()), this, SLOT(on_frame_ready()));
-
 }
 
 void MainWindow::on_btn_open_clicked()
@@ -59,7 +60,8 @@ void MainWindow::on_btn_open_clicked()
         return;
 
     // TODO : implement this
-    streamLoader->open("/home/aref/Workspace/pp/SoccerBallDetection/interfaces/offline/images/a.jpg");
+//    streamLoader->open("/home/aref/Workspace/pp/SoccerBallDetection/interfaces/offline/images/a.jpg");
+    streamLoader->open("/home/aref/zara/dataset/Positive/");
 }
 
 void MainWindow::on_btn_reload_clicked()
@@ -97,15 +99,60 @@ void MainWindow::on_frame_ready()
     for (Balls::const_iterator itr=results.begin(); itr<results.end(); itr++)
     {
         const Ball& b = *itr;
-        debugger.setPen(DebugHelperInterface::Green);
+
         int x = b.PositionInImage().translation().x();
         int y = b.PositionInImage().translation().y();
         int r = b.PositionInImage().radious();
-        debugger.draw_circle(x, y, r);
+
+        if (x == 0 && y == 0 && r == 0)
+            continue;
+
+        debugger.draw_circle(x, y, r, DebugHelperInterface::Red, "final_result");
+        cout << "  - ball: " << x << ", " << y << ", " << r << "\n";
     }
 
     //-- Show Frame
     ui->monitor->setText("");
     const QImage& image = debugger.getImage().scaled(ui->monitor->size(), Qt::KeepAspectRatio);
     ui->monitor->setPixmap(QPixmap::fromImage(image));
+
+    //-- Show Time
+    if (ballDetector.averageCycleTime() < 1.0)
+        ui->cycletime->setText(QString("Average time : ") + QString::number((int)(ballDetector.averageCycleTime() * 1000)) + " ms");
+    else
+        ui->cycletime->setText(QString("Average time : ") + QString::number(((int)(ballDetector.averageCycleTime() * 10)) / 10) + " s");
+
+    cout << "frame painted!\n" << flush;
+}
+
+void MainWindow::update_contexts()
+{
+    debugger.setContexEnabled("final_result", ui->chk_ri->isChecked());
+    debugger.setContexEnabled("color_analyzer", ui->chk_ca->isChecked());
+    debugger.setContexEnabled("edge_image", ui->chk_edg->isChecked());
+    debugger.setContexEnabled("frht", ui->chk_frht->isChecked());
+//    debugger.setContexEnabled("kinematics_provider", ui->chk_ri->isChecked()); // [TODO] Fix here
+//    debugger.setContexEnabled("pattern_recognizer", ui->chk_ri->isChecked()); // [TODO] Fix here
+//    debugger.setContexEnabled("ball_detector", ui->chk_ri->isChecked()); // [TODO] Fix here
+
+}
+
+void MainWindow::on_chk_ri_clicked()
+{
+    update_contexts();
+}
+
+void MainWindow::on_chk_ca_clicked()
+{
+    update_contexts();
+}
+
+void MainWindow::on_chk_edg_clicked()
+{
+    update_contexts();
+}
+
+void MainWindow::on_chk_frht_clicked()
+{
+    update_contexts();
 }

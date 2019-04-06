@@ -29,14 +29,22 @@ private slots:
     void on_btn_pause_clicked();
     void on_btn_play_clicked();
     void on_btn_forward_clicked();
-
     void on_frame_ready();
+    void on_chk_ri_clicked();
+
+    void on_chk_ca_clicked();
+
+    void on_chk_edg_clicked();
+
+    void on_chk_frht_clicked();
 
 private:
     Ui::MainWindow *ui;
     MVision::BallDetector ballDetector;
     StreamLoader* streamLoader;
     Debugger debugger;
+
+    void update_contexts();
 };
 
 #endif // MAINWINDOW_H

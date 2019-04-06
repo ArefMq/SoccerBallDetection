@@ -54,7 +54,7 @@ void BallDetector::update(const Image& image)
     if (_averageCycleTime == -1)
         _averageCycleTime = cycleTime;
     else
-        _averageCycleTime = _averageCycleTime * 0.95 + cycleTime * 0.5;
+        _averageCycleTime = _averageCycleTime * 0.95 + cycleTime * 0.05;
 }
 
 void BallDetector::update()

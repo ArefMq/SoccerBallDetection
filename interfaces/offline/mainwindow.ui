@@ -287,7 +287,10 @@
      </rect>
     </property>
     <property name="text">
-     <string>Raw Image</string>
+     <string>Final Result</string>
+    </property>
+    <property name="checked">
+     <bool>true</bool>
     </property>
    </widget>
   </widget>
